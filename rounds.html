@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>اختيار الجولة - جولات عطرية</title>
+
+<style>
+:root{
+  --bg:#E6EEE9;
+  --deep:#0B3D2E;
+  --mid:#1F6B52;
+  --card:#ffffffee;
+  --stroke:#cfe1da;
+  --muted:#6f8d83;
+  --danger1:#7c1f1f;
+  --danger2:#5a1414;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+  background:#f4f4f4;
+  padding:22px;
+}
+
+.shell{
+  max-width:1100px;
+  margin:auto;
+  background:var(--bg);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.shell::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    repeating-radial-gradient(circle at 30% 30%,
+      rgba(11,61,46,.06) 0 1px,
+      transparent 1px 28px),
+    repeating-radial-gradient(circle at 70% 65%,
+      rgba(11,61,46,.05) 0 1px,
+      transparent 1px 32px);
+  opacity:.55;
+  pointer-events:none;
+}
+
+.header{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.logo{
+  width:min(360px, 92vw);
+  height:auto;
+  display:block;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
+}
+
+.playerPill{
+  background:#fff;
+  border:1px solid var(--stroke);
+  border-radius:999px;
+  padding:10px 12px;
+  font-weight:1000;
+  color:var(--deep);
+  box-shadow:0 10px 26px rgba(0,0,0,.08);
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+h1{
+  position:relative;
+  margin: 6px 0 16px 0;
+  color:var(--deep);
+  font-weight:1100;
+  font-size:30px;
+}
+
+.grid{
+  position:relative;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap:14px;
+}
+
+@media (max-width: 950px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 14px 40px rgba(0,0,0,.08);
+  min-height: 190px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.cardTitle{
+  font-size:22px;
+  font-weight:1100;
+  color:var(--deep);
+}
+
+.cardDesc{
+  color:rgba(11,61,46,.82);
+  font-weight:900;
+  line-height:1.5;
+}
+
+.badge{
+  align-self:flex-start;
+  background: rgba(31,107,82,.10);
+  border: 1px solid rgba(31,107,82,.20);
+  color: var(--mid);
+  font-weight:1100;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+}
+
+.badge.lock{
+  background: rgba(120,120,120,.10);
+  border-color: rgba(120,120,120,.18);
+  color: #556b63;
+}
+
+.btn{
+  margin-top:auto;
+  width:100%;
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1100;
+  padding:12px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.15s;
+  text-decoration:none;
+  text-align:center;
+  display:block;
+}
+
+.btn:hover{ transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); opacity:.96; }
+
+.btn.disabled{
+  cursor:not-allowed;
+  background: linear-gradient(180deg, #a9bdb6, #93a9a2);
+  border-color: rgba(11,61,46,.15);
+  color:#f6fbf9;
+  transform:none;
+}
+
+.note{
+  position:relative;
+  margin-top:14px;
+  color:rgba(11,61,46,.75);
+  font-weight:900;
+  font-size:13px;
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+  <div class="header">
+    <img class="logo" src="images/logo.png" alt="جولات عطرية">
+    <div class="playerPill" id="playersPill">المتسابقين: —</div>
+  </div>
+
+  <h1>اختر الجولة</h1>
+
+  <div class="grid">
+
+    <!-- Round 1: Unknown Perfume -->
+    <div class="card">
+      <div class="badge">متاح الآن</div>
+      <div class="cardTitle">جولة العطر المجهول</div>
+      <div class="cardDesc">
+        لوحة تفاعلية: فتح أرقام + نظام نقاط + سترايك + كشف اسم العطر.
+      </div>
+      <a class="btn" href="challenges.html" id="goUnknown">ابدأ الجولة</a>
+    </div>
+
+    <!-- Round 2: Bell -->
+    <div class="card">
+      <div class="badge lock">قريبًا</div>
+      <div class="cardTitle">جولة الجرس</div>
+      <div class="cardDesc">
+        سيتم تفعيلها لاحقًا بعد تصميم اللعبة الخاصة بها.
+      </div>
+      <span class="btn disabled" aria-disabled="true">غير متاح</span>
+    </div>
+
+    <!-- Round 3: 30 seconds -->
+    <div class="card">
+      <div class="badge lock">قريبًا</div>
+      <div class="cardTitle">جولة تحدي الـ٣٠ ثانية</div>
+      <div class="cardDesc">
+        سيتم تفعيلها لاحقًا بعد تصميم اللعبة الخاصة بها.
+      </div>
+      <span class="btn disabled" aria-disabled="true">غير متاح</span>
+    </div>
+
+  </div>
+
+  <div class="note">ملاحظة: إذا فتحت هذه الصفحة مباشرة بدون إدخال أسماء المتسابقين، سيتم عرض أسماء افتراضية.</div>
+
+</div>
+
+<script>
+/* Security/flow: if not authed, return to landing */
+if(sessionStorage.getItem("jawalat_authed") !== "1"){
+  window.location.href = "index.html";
+}
+
+/* Show player names from session */
+const p1 = sessionStorage.getItem("jawalat_p1") || "لاعب 1";
+const p2 = sessionStorage.getItem("jawalat_p2") || "لاعب 2";
+document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
+
+/* Optional: protect challenges page flow if names missing */
+document.getElementById("goUnknown").addEventListener("click", (e)=>{
+  if(!sessionStorage.getItem("jawalat_p1") || !sessionStorage.getItem("jawalat_p2")){
+    // still allow, but you can enforce:
+    // e.preventDefault(); window.location.href="index.html";
+  }
+});
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>جولات عطرية</title>
+<title>جولة العطر المجهول - التحديات</title>
 
 <style>
 :root{
@@ -47,17 +47,68 @@ body{
   pointer-events:none;
 }
 
+.topbar{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:10px;
+}
+
+.logo{
+  width:min(260px, 70vw);
+  height:auto;
+  display:block;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
+}
+
+.pill{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius:999px;
+  padding:10px 12px;
+  font-weight:1000;
+  color:var(--deep);
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.btn{
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1000;
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.15s;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn:hover{ transform:translateY(-1px); }
+.btn:active{ transform:translateY(0); opacity:.96; }
+
+.btn.secondary{
+  background:#fff;
+  color:var(--deep);
+}
+
 h1{
   position:relative;
-  margin:0 0 18px 0;
+  margin:10px 0 8px 0;
   color:var(--deep);
-  font-size:36px;
+  font-size:34px;
 }
 
 .sub{
   position:relative;
-  margin:0 0 18px 0;
-  font-weight:800;
+  margin:0 0 16px 0;
+  font-weight:900;
   color:rgba(11,61,46,.85);
 }
 
@@ -126,13 +177,31 @@ h1{
 
 <body>
 <div class="shell">
-  <h1>جولات عطرية</h1>
+
+  <div class="topbar">
+    <img class="logo" src="images/logo.png" alt="جولات عطرية">
+    <div class="pill" id="playersPill">المتسابقين: —</div>
+    <a class="btn secondary" href="rounds.html">رجوع للجولات</a>
+  </div>
+
+  <h1>جولة العطر المجهول</h1>
   <p class="sub">اختر التحدي ثم افتح أحد الأسئلة (4 أسئلة لكل تحدي).</p>
 
   <div id="container"></div>
 </div>
 
 <script>
+// ✅ تأكد أنه دخل من صفحة الدخول
+if(sessionStorage.getItem("jawalat_authed") !== "1"){
+  window.location.href = "index.html";
+}
+
+// عرض أسماء اللاعبين
+const p1 = sessionStorage.getItem("jawalat_p1") || "لاعب 1";
+const p2 = sessionStorage.getItem("jawalat_p2") || "لاعب 2";
+document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
+
+// بناء التحديات
 const container = document.getElementById("container");
 
 for(let ch=1; ch<=7; ch++){
@@ -152,7 +221,7 @@ for(let ch=1; ch<=7; ch++){
   for(let q=1; q<=4; q++){
     const link = document.createElement("a");
     link.className = "qBtn";
-    link.href = `questions/Ch${ch}Q${q}.html`;   // ✅ المسار الجديد
+    link.href = `questions/Ch${ch}Q${q}.html`;
     link.textContent = `السؤال ${q}`;
     link.target = "_blank";
     qGrid.appendChild(link);

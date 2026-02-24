@@ -181,6 +181,7 @@ h1{
   <div class="topbar">
     <img class="logo" src="images/logo.png" alt="جولات عطرية">
     <div class="pill" id="playersPill">المتسابقين: —</div>
+    <div class="pill" id="totalsPill">النقاط: —</div>
     <a class="btn secondary" href="rounds.html">رجوع للجولات</a>
   </div>
 
@@ -191,17 +192,31 @@ h1{
 </div>
 
 <script>
-// ✅ تأكد أنه دخل من صفحة الدخول
+// auth check
 if(sessionStorage.getItem("jawalat_authed") !== "1"){
   window.location.href = "index.html";
 }
 
-// عرض أسماء اللاعبين
-const p1 = sessionStorage.getItem("jawalat_p1") || "لاعب 1";
-const p2 = sessionStorage.getItem("jawalat_p2") || "لاعب 2";
+// players
+const p1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1").trim();
+const p2 = (localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "لاعب 2").trim();
 document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
 
-// بناء التحديات
+// totals
+function getTotals(){
+  const raw = localStorage.getItem("jawalat_totals_v1");
+  if(!raw) return [0,0];
+  try{
+    const parsed = JSON.parse(raw);
+    if(parsed?.totals?.length === 2) return parsed.totals;
+  }catch(e){}
+  return [0,0];
+}
+const totals = getTotals();
+document.getElementById("totalsPill").textContent =
+  `النقاط: ${p1} (${totals[0]}) — ${p2} (${totals[1]})`;
+
+// build challenges
 const container = document.getElementById("container");
 
 for(let ch=1; ch<=7; ch++){

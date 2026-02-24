@@ -186,11 +186,11 @@ body{
   filter: drop-shadow(0 14px 26px rgba(0,0,0,.10));
 }
 
-/* ✅ HUD: تحت المربعات مباشرة (بدون قص) */
+/* HUD: تحت المربعات */
 .hud{
   position:absolute;
   left: var(--frame-pad);
-  top: calc(var(--grid-top) + var(--grid-height) + 16px); /* ✅ تحت المربعات */
+  top: calc(var(--grid-top) + var(--grid-height) + 16px);
   width:min(420px, 46%);
   display:flex;
   flex-direction:column;
@@ -282,16 +282,16 @@ body{
   </div>
 
   <div class="hud">
-    <div class="pill"><span>الدور</span><span id="turnName">لاعب 1</span></div>
+    <div class="pill"><span>الدور</span><span id="turnName">—</span></div>
     <div class="pill"><span>نقاط اللوحة</span><span id="points">50</span></div>
 
     <div class="pill">
-      <span>لاعب 1</span>
+      <span id="p1Label">لاعب 1</span>
       <span><b id="s1">0</b> <span class="strike" id="strike1"></span> <span id="ex1"></span></span>
     </div>
 
     <div class="pill">
-      <span>لاعب 2</span>
+      <span id="p2Label">لاعب 2</span>
       <span><b id="s2">0</b> <span class="strike" id="strike2"></span> <span id="ex2"></span></span>
     </div>
 
@@ -313,6 +313,21 @@ body{
   const base = file.replace(/\.html$/i, "");
   document.getElementById("pyramidImg").src = `../images/${base}.png`;
 })();
+
+/* ✅ Player names:
+   IMPORTANT: sessionStorage doesn't carry to a new tab.
+   So we read localStorage first (works across tabs), then sessionStorage. */
+function getPlayerName(key, fallback){
+  return (
+    (localStorage.getItem(key) || "").trim() ||
+    (sessionStorage.getItem(key) || "").trim() ||
+    fallback
+  );
+}
+const P1_NAME = getPlayerName("jawalat_p1", "لاعب 1");
+const P2_NAME = getPlayerName("jawalat_p2", "لاعب 2");
+document.getElementById("p1Label").textContent = P1_NAME;
+document.getElementById("p2Label").textContent = P2_NAME;
 
 /* Q1 data */
 const board = {
@@ -369,10 +384,12 @@ function fitTextToBox(container, minPx=12, maxPx=18){
   }
 }
 
+function playerName(i){ return i === 0 ? P1_NAME : P2_NAME; }
+
 function updateHUD(){
   if (!roundEnded && isExcluded(turn) && !isExcluded(1-turn)) turn = 1 - turn;
 
-  el.turnName.textContent = (turn===0) ? "لاعب 1" : "لاعب 2";
+  el.turnName.textContent = playerName(turn);
   el.points.textContent = roundEnded ? 0 : calcPoints();
   el.s1.textContent = scores[0];
   el.s2.textContent = scores[1];
@@ -426,7 +443,7 @@ el.box1.addEventListener("click", ()=>{
   scores[turn] += calcPoints();
   roundEnded = true;
   revealAll();
-  setMsg(`<span class="ok">تم فتح اسم العطر ✅ نقاط احتُسبت للاعب الحالي</span>`);
+  setMsg(`<span class="ok">تم فتح اسم العطر ✅ نقاط احتُسبت لـ ${playerName(turn)}</span>`);
   updateHUD();
 });
 
@@ -443,7 +460,7 @@ document.querySelectorAll(".gameBox").forEach(box=>{
     clueEl.textContent = board.clues[id] ?? "—";
 
     revealedCount++;
-    setMsg(`انفتح رقم <b>${id}</b> (-${REVEAL_PENALTY}). الدور للخصم.`);
+    setMsg(`انفتح رقم <b>${id}</b> (-${REVEAL_PENALTY}). الدور لـ ${playerName(1-turn)}.`);
     requestAnimationFrame(()=>fitTextToBox(clueEl, 12, 18));
 
     switchTurnAfterAction();
@@ -458,9 +475,9 @@ el.strikeBtn.addEventListener("click", ()=>{
   strikes[turn]++;
 
   if (isExcluded(turn)){
-    setMsg(`<span class="bad">سترايك 🔴 اللاعب ${(turn===0)?1:2} صار مستبعد من السؤال.</span>`);
+    setMsg(`<span class="bad">سترايك 🔴 ${playerName(turn)} صار مستبعد من السؤال.</span>`);
   } else {
-    setMsg(`<span class="bad">سترايك 🔴 الدور للخصم.</span>`);
+    setMsg(`<span class="bad">سترايك 🔴 الدور لـ ${playerName(1-turn)}.</span>`);
   }
 
   switchTurnAfterAction();
@@ -494,4 +511,3 @@ updateHUD();
 </script>
 </body>
 </html>
-

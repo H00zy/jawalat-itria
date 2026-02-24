@@ -93,7 +93,7 @@ body{
 .box1.revealed{ cursor:default; }
 .box1 span{ display:block; width:100%; }
 
-/* Grid: labelR | box(2/3/4) | labelL | box(5/6/7) */
+/* Grid */
 .mainGrid{
   position:absolute;
   top: var(--grid-top);
@@ -186,20 +186,16 @@ body{
   filter: drop-shadow(0 14px 26px rgba(0,0,0,.10));
 }
 
-/* HUD (✅ fixed: buttons row + no overlap with boxes above) */
+/* ✅ HUD: تحت المربعات مباشرة (بدون قص) */
 .hud{
   position:absolute;
   left: var(--frame-pad);
-  bottom: calc(var(--frame-pad) + 10px); /* ✅ نزّلناه شوي */
+  top: calc(var(--grid-top) + var(--grid-height) + 16px); /* ✅ تحت المربعات */
   width:min(420px, 46%);
   display:flex;
   flex-direction:column;
   gap:10px;
   z-index:3;
-
-  /* ✅ يمنع صعوده والتداخل */
-  max-height: 32%;
-  overflow: hidden;
 }
 
 .pill{

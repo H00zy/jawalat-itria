@@ -16,7 +16,7 @@
 
 body{
   margin:0;
-  font-family: system-ui;
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
   background:#f4f4f4;
   padding:22px;
 }
@@ -27,28 +27,52 @@ body{
   background:var(--bg);
   border:1px solid var(--stroke);
   border-radius:18px;
-  padding:25px;
+  padding:24px;
   box-shadow:0 20px 60px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.shell::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    repeating-radial-gradient(circle at 30% 30%,
+      rgba(11,61,46,.06) 0 1px,
+      transparent 1px 28px),
+    repeating-radial-gradient(circle at 70% 65%,
+      rgba(11,61,46,.05) 0 1px,
+      transparent 1px 32px);
+  opacity:.55;
+  pointer-events:none;
 }
 
 h1{
-  margin:0 0 25px 0;
+  position:relative;
+  margin:0 0 18px 0;
   color:var(--deep);
   font-size:36px;
 }
 
+.sub{
+  position:relative;
+  margin:0 0 18px 0;
+  font-weight:800;
+  color:rgba(11,61,46,.85);
+}
+
 .challenge{
+  position:relative;
   background:var(--card);
   border:1px solid var(--stroke);
   border-radius:18px;
-  margin-bottom:16px;
+  margin-bottom:14px;
   overflow:hidden;
-  transition:.3s;
 }
 
 .challengeHeader{
-  padding:16px 20px;
-  font-weight:900;
+  padding:16px 18px;
+  font-weight:1000;
   font-size:20px;
   color:var(--deep);
   cursor:pointer;
@@ -57,49 +81,55 @@ h1{
   align-items:center;
 }
 
-.challengeHeader:hover{
-  background:#e9f3ef;
-}
+.challengeHeader:hover{ background:#e9f3ef; }
+
+.chev{ transition:.2s; }
+.opened .chev{ transform: rotate(180deg); }
 
 .questions{
   max-height:0;
   overflow:hidden;
-  transition:max-height .4s ease;
-  padding:0 20px;
+  transition:max-height .35s ease;
+  padding:0 18px;
 }
 
 .questions.open{
-  max-height:500px;
-  padding-bottom:20px;
+  max-height:480px;
+  padding-bottom:18px;
+}
+
+.qGrid{
+  display:grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
 }
 
 .qBtn{
   display:block;
-  margin-top:10px;
-  padding:10px;
-  border-radius:12px;
+  padding:12px 10px;
+  border-radius:14px;
   background:linear-gradient(180deg,var(--mid),#16604a);
   color:white;
   text-decoration:none;
-  font-weight:900;
+  font-weight:1000;
   text-align:center;
-  transition:.2s;
+  transition:.15s;
 }
+.qBtn:hover{ transform:translateY(-2px); }
 
-.qBtn:hover{
-  transform:translateY(-2px);
+@media (max-width: 900px){
+  .qGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 </style>
 </head>
 
 <body>
-
 <div class="shell">
   <h1>جولات عطرية</h1>
+  <p class="sub">اختر التحدي ثم افتح أحد الأسئلة (4 أسئلة لكل تحدي).</p>
 
-  <!-- Generate 7 Challenges -->
   <div id="container"></div>
-
 </div>
 
 <script>
@@ -111,25 +141,28 @@ for(let ch=1; ch<=7; ch++){
 
   const header = document.createElement("div");
   header.className = "challengeHeader";
-  header.innerHTML = `
-    <span>التحدي ${ch}</span>
-    <span>▼</span>
-  `;
+  header.innerHTML = `<span>التحدي ${ch}</span><span class="chev">▼</span>`;
 
   const qWrap = document.createElement("div");
   qWrap.className = "questions";
 
+  const qGrid = document.createElement("div");
+  qGrid.className = "qGrid";
+
   for(let q=1; q<=4; q++){
     const link = document.createElement("a");
     link.className = "qBtn";
-    link.href = `Ch${ch}Q${q}.html`;
+    link.href = `questions/Ch${ch}Q${q}.html`;   // ✅ المسار الجديد
     link.textContent = `السؤال ${q}`;
     link.target = "_blank";
-    qWrap.appendChild(link);
+    qGrid.appendChild(link);
   }
 
+  qWrap.appendChild(qGrid);
+
   header.addEventListener("click", ()=>{
-    qWrap.classList.toggle("open");
+    const opened = qWrap.classList.toggle("open");
+    block.classList.toggle("opened", opened);
   });
 
   block.appendChild(header);
@@ -137,6 +170,5 @@ for(let ch=1; ch<=7; ch++){
   container.appendChild(block);
 }
 </script>
-
 </body>
 </html>

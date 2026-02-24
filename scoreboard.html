@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>لوحة النقاط - جولات عطرية</title>
+
+<style>
+:root{
+  --bg:#E6EEE9;
+  --deep:#0B3D2E;
+  --mid:#1F6B52;
+  --card:#ffffffee;
+  --stroke:#cfe1da;
+  --danger1:#7c1f1f;
+  --danger2:#5a1414;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+  background:#f4f4f4;
+  padding:22px;
+}
+
+.shell{
+  max-width:1100px;
+  margin:auto;
+  background:var(--bg);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.shell::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    repeating-radial-gradient(circle at 30% 30%,
+      rgba(11,61,46,.06) 0 1px,
+      transparent 1px 28px),
+    repeating-radial-gradient(circle at 70% 65%,
+      rgba(11,61,46,.05) 0 1px,
+      transparent 1px 32px);
+  opacity:.55;
+  pointer-events:none;
+}
+
+.header{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+  margin-bottom:18px;
+}
+
+.logo{
+  width:min(360px, 90vw);
+  max-width:100%;
+  height:auto;
+  display:block;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
+}
+
+.card{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:16px;
+  box-shadow:0 14px 40px rgba(0,0,0,.08);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:14px;
+}
+
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
+}
+
+.title{
+  color:var(--deep);
+  font-weight:1000;
+  margin:0 0 12px 0;
+  font-size:20px;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+
+.label{
+  color:rgba(11,61,46,.85);
+  font-weight:900;
+  font-size:14px;
+}
+
+.input, .select{
+  background:#fff;
+  border:1px solid var(--stroke);
+  border-radius:14px;
+  padding:12px 12px;
+  font-weight:900;
+  outline:none;
+  min-width: 220px;
+}
+
+.input:focus, .select:focus{
+  border-color: rgba(11,61,46,.35);
+  box-shadow: 0 0 0 3px rgba(11,61,46,.12);
+}
+
+.bigScore{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px 16px;
+  border-radius:18px;
+  background: linear-gradient(180deg, #ffffff, #f6fbf9);
+  border:1px solid var(--stroke);
+}
+
+.name{
+  font-weight:1000;
+  font-size:18px;
+  color:var(--deep);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width: 70%;
+}
+
+.score{
+  font-weight:1100;
+  font-size:26px;
+  color:var(--deep);
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#fff;
+  border:1px solid var(--stroke);
+  border-radius:999px;
+  padding:8px 12px;
+  font-weight:1000;
+  color:var(--deep);
+}
+
+.btnRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.btn{
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1000;
+  padding:12px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.15s;
+}
+.btn:hover{ transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); opacity:.96; }
+
+.btn.secondary{
+  background: #ffffff;
+  color: var(--deep);
+}
+
+.btn.danger{
+  border-color: rgba(124,31,31,.35);
+  background: linear-gradient(180deg, var(--danger1), var(--danger2));
+  color:#fff;
+}
+
+.hint{
+  margin-top:10px;
+  color:rgba(11,61,46,.75);
+  font-weight:900;
+  font-size:13px;
+}
+
+.log{
+  margin-top:12px;
+  max-height: 220px;
+  overflow:auto;
+  border-radius:14px;
+  border:1px dashed rgba(11,61,46,.18);
+  background: rgba(255,255,255,.65);
+  padding:10px;
+}
+
+.logItem{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  border-radius:12px;
+  background: rgba(255,255,255,.85);
+  border:1px solid rgba(207,225,218,.9);
+  margin-bottom:8px;
+  font-weight:900;
+  color:var(--deep);
+}
+
+.small{
+  font-size:12px;
+  color:rgba(11,61,46,.7);
+  font-weight:900;
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+  <div class="header">
+    <img class="logo" src="images/logo.png" alt="جولات عطرية">
+  </div>
+
+  <div class="grid">
+
+    <!-- Players -->
+    <div class="card">
+      <h2 class="title">المتسابقين</h2>
+
+      <div class="row" style="margin-bottom:10px">
+        <span class="label">اسم المتسابق 1</span>
+        <input id="p1Name" class="input" placeholder="اكتب الاسم..." />
+      </div>
+
+      <div class="bigScore" style="margin-bottom:12px">
+        <div class="name" id="p1NameShow">لاعب 1</div>
+        <div class="score" id="p1Score">0</div>
+      </div>
+
+      <div class="row" style="margin-bottom:10px">
+        <span class="label">اسم المتسابق 2</span>
+        <input id="p2Name" class="input" placeholder="اكتب الاسم..." />
+      </div>
+
+      <div class="bigScore">
+        <div class="name" id="p2NameShow">لاعب 2</div>
+        <div class="score" id="p2Score">0</div>
+      </div>
+
+      <div class="btnRow">
+        <button class="btn secondary" id="saveNames">حفظ الأسماء</button>
+        <button class="btn danger" id="resetAll">تصفير كل النقاط</button>
+      </div>
+
+      <div class="hint">💡 يتم حفظ الأسماء والنقاط تلقائيًا في المتصفح (LocalStorage).</div>
+    </div>
+
+    <!-- Add points -->
+    <div class="card">
+      <h2 class="title">إضافة نقاط الجولة</h2>
+
+      <div class="row" style="margin-bottom:10px">
+        <span class="label">المتسابق</span>
+        <select id="who" class="select">
+          <option value="0">المتسابق 1</option>
+          <option value="1">المتسابق 2</option>
+        </select>
+      </div>
+
+      <div class="row" style="margin-bottom:10px">
+        <span class="label">عدد النقاط</span>
+        <input id="pts" class="input" inputmode="numeric" placeholder="مثلاً 20" />
+        <span class="pill">اضغط Enter للإضافة</span>
+      </div>
+
+      <div class="btnRow">
+        <button class="btn" id="addBtn">إضافة</button>
+        <button class="btn secondary" id="undoBtn">تراجع</button>
+        <button class="btn secondary" id="clearLog">مسح السجل</button>
+      </div>
+
+      <div class="hint">🔙 زر التراجع يرجّع آخر إضافة فقط (حتى لو غلطت).</div>
+
+      <div class="log" id="log"></div>
+      <div class="small">ملاحظة: التراجع يعتمد على سجل الإضافات.</div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* ---------- State (saved) ---------- */
+const STORAGE_KEY = "jawalat_scoreboard_v1";
+
+const state = {
+  names: ["لاعب 1", "لاعب 2"],
+  scores: [0, 0],
+  history: [] // {playerIndex, delta, ts}
+};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const parsed = JSON.parse(raw);
+    if(parsed?.names?.length === 2) state.names = parsed.names;
+    if(parsed?.scores?.length === 2) state.scores = parsed.scores;
+    if(Array.isArray(parsed?.history)) state.history = parsed.history;
+  }catch(e){}
+}
+
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+/* ---------- UI refs ---------- */
+const el = {
+  p1Name: document.getElementById("p1Name"),
+  p2Name: document.getElementById("p2Name"),
+  p1NameShow: document.getElementById("p1NameShow"),
+  p2NameShow: document.getElementById("p2NameShow"),
+  p1Score: document.getElementById("p1Score"),
+  p2Score: document.getElementById("p2Score"),
+  who: document.getElementById("who"),
+  pts: document.getElementById("pts"),
+  addBtn: document.getElementById("addBtn"),
+  undoBtn: document.getElementById("undoBtn"),
+  saveNames: document.getElementById("saveNames"),
+  resetAll: document.getElementById("resetAll"),
+  log: document.getElementById("log"),
+  clearLog: document.getElementById("clearLog"),
+};
+
+function render(){
+  el.p1NameShow.textContent = state.names[0] || "لاعب 1";
+  el.p2NameShow.textContent = state.names[1] || "لاعب 2";
+  el.p1Score.textContent = state.scores[0] ?? 0;
+  el.p2Score.textContent = state.scores[1] ?? 0;
+
+  el.who.options[0].textContent = state.names[0] || "المتسابق 1";
+  el.who.options[1].textContent = state.names[1] || "المتسابق 2";
+
+  // Log
+  el.log.innerHTML = "";
+  const items = [...state.history].slice(-20).reverse(); // show last 20
+  if(items.length === 0){
+    el.log.innerHTML = `<div class="small">لا يوجد سجل بعد.</div>`;
+  } else {
+    for(const h of items){
+      const d = document.createElement("div");
+      d.className = "logItem";
+      const who = state.names[h.playerIndex] || (h.playerIndex===0 ? "لاعب 1" : "لاعب 2");
+      const sign = (h.delta >= 0) ? "+" : "";
+      d.innerHTML = `<span>${who}</span><span>${sign}${h.delta}</span>`;
+      el.log.appendChild(d);
+    }
+  }
+
+  // Enable/disable undo
+  el.undoBtn.disabled = state.history.length === 0;
+  el.undoBtn.style.opacity = el.undoBtn.disabled ? .6 : 1;
+  el.undoBtn.style.cursor = el.undoBtn.disabled ? "not-allowed" : "pointer";
+}
+
+function sanitizeName(s){
+  return (s || "").trim().slice(0, 28);
+}
+
+function parsePoints(s){
+  // يسمح بالأرقام + و -
+  const t = (s || "").trim().replace(/[^\d\-+]/g, "");
+  if(!t) return null;
+  const n = Number(t);
+  if(!Number.isFinite(n)) return null;
+  return Math.trunc(n);
+}
+
+function addPoints(){
+  const idx = Number(el.who.value);
+  const delta = parsePoints(el.pts.value);
+  if(delta === null) return;
+
+  state.scores[idx] = (state.scores[idx] || 0) + delta;
+  state.history.push({playerIndex: idx, delta, ts: Date.now()});
+
+  el.pts.value = "";
+  save();
+  render();
+  el.pts.focus();
+}
+
+function undo(){
+  const last = state.history.pop();
+  if(!last) return;
+  state.scores[last.playerIndex] = (state.scores[last.playerIndex] || 0) - last.delta;
+  save();
+  render();
+}
+
+function resetAll(){
+  state.scores = [0,0];
+  state.history = [];
+  save();
+  render();
+}
+
+/* ---------- Events ---------- */
+el.saveNames.addEventListener("click", ()=>{
+  state.names[0] = sanitizeName(el.p1Name.value) || "لاعب 1";
+  state.names[1] = sanitizeName(el.p2Name.value) || "لاعب 2";
+  save();
+  render();
+});
+
+el.addBtn.addEventListener("click", addPoints);
+
+el.pts.addEventListener("keydown", (e)=>{
+  if(e.key === "Enter"){
+    e.preventDefault();
+    addPoints();
+  }
+});
+
+el.undoBtn.addEventListener("click", undo);
+
+el.resetAll.addEventListener("click", ()=>{
+  if(confirm("أكيد تبي تصفير كل النقاط؟")){
+    resetAll();
+  }
+});
+
+el.clearLog.addEventListener("click", ()=>{
+  if(confirm("أكيد تبي مسح السجل؟ (النقاط تبقى)")){
+    state.history = [];
+    save();
+    render();
+  }
+});
+
+/* ---------- Init ---------- */
+load();
+el.p1Name.value = state.names[0];
+el.p2Name.value = state.names[1];
+render();
+</script>
+</body>
+</html>

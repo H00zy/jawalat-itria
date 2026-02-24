@@ -203,7 +203,11 @@ document.getElementById("checkBtn").addEventListener("click", ()=>{
     pwMsg.textContent = "كلمة المرور غير صحيحة";
     return;
   }
+
+  // ✅ حفظ auth في الاثنين
   sessionStorage.setItem("jawalat_authed", "1");
+  localStorage.setItem("jawalat_authed", "1");
+
   showStep(2);
   p1.focus();
 });
@@ -227,19 +231,21 @@ document.getElementById("startBtn").addEventListener("click", ()=>{
     return;
   }
 
-  // ✅ تخزين في session
+  // ✅ تخزين الأسماء في الاثنين
   sessionStorage.setItem("jawalat_p1", n1);
   sessionStorage.setItem("jawalat_p2", n2);
 
-  // ✅ تخزين في local (عشان يشتغل في تبويب جديد)
   localStorage.setItem("jawalat_p1", n1);
   localStorage.setItem("jawalat_p2", n2);
 
   window.location.href = "rounds.html";
 });
 
-// لو سبق الدخول في نفس الجلسة
-if(sessionStorage.getItem("jawalat_authed") === "1"){
+// لو سبق الدخول
+if(
+  sessionStorage.getItem("jawalat_authed") === "1" ||
+  localStorage.getItem("jawalat_authed") === "1"
+){
   showStep(2);
 }
 </script>

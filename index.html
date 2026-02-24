@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>جولات عطرية | صفحة المسابقة</title>
+<title>جولات عطرية</title>
 
 <style>
 :root{
@@ -12,13 +12,11 @@
   --mid:#1F6B52;
   --card:#ffffffee;
   --stroke:#cfe1da;
-  --shadow: 0 18px 55px rgba(0,0,0,.12);
 }
 
-*{ box-sizing:border-box; }
 body{
   margin:0;
-  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+  font-family: system-ui;
   background:#f4f4f4;
   padding:22px;
 }
@@ -29,428 +27,116 @@ body{
   background:var(--bg);
   border:1px solid var(--stroke);
   border-radius:18px;
-  box-shadow: var(--shadow);
-  overflow:hidden;
-  position:relative;
+  padding:25px;
+  box-shadow:0 20px 60px rgba(0,0,0,.12);
 }
 
-/* Soft pattern */
-.shell::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:
-    repeating-radial-gradient(circle at 30% 30%,
-      rgba(11,61,46,.06) 0 1px,
-      transparent 1px 28px),
-    repeating-radial-gradient(circle at 70% 65%,
-      rgba(11,61,46,.05) 0 1px,
-      transparent 1px 32px);
-  opacity:.55;
-  pointer-events:none;
-}
-
-.header{
-  position:relative;
-  padding:22px 22px 14px 22px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-}
-
-.brand{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.brand h1{
-  margin:0;
+h1{
+  margin:0 0 25px 0;
   color:var(--deep);
-  font-size:34px;
-  letter-spacing:.3px;
-}
-.brand p{
-  margin:0;
-  color:rgba(11,61,46,.8);
-  font-weight:700;
+  font-size:36px;
 }
 
-.topActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-start;
-}
-
-.btn{
-  border:1px solid rgba(11,61,46,.22);
-  background:linear-gradient(180deg, var(--deep), #083528);
-  color:#fff;
-  padding:10px 14px;
-  border-radius:14px;
-  font-weight:900;
-  cursor:pointer;
-  box-shadow: 0 10px 28px rgba(11,61,46,.18);
-  transition: transform .12s ease, opacity .12s ease;
-}
-.btn:hover{ transform: translateY(-1px); }
-.btn:active{ transform: translateY(0); opacity:.95; }
-
-.btn.secondary{
-  background:#ffffffee;
-  color:var(--deep);
-  box-shadow:none;
-}
-
-.content{
-  position:relative;
-  padding: 14px 22px 22px;
-  display:grid;
-  grid-template-columns: 1.2fr .8fr;
-  gap:16px;
-}
-
-.card{
+.challenge{
   background:var(--card);
   border:1px solid var(--stroke);
-  border-radius:16px;
-  padding:16px;
+  border-radius:18px;
+  margin-bottom:16px;
+  overflow:hidden;
+  transition:.3s;
 }
 
-.card h2{
-  margin:0 0 10px 0;
-  color:var(--deep);
-  font-size:18px;
-}
-.small{
-  color:rgba(11,61,46,.85);
-  font-weight:700;
-  margin:0;
-  line-height:1.6;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap:12px;
-  margin-top:12px;
-}
-
-.q{
-  border-radius:16px;
-  border:1px solid rgba(11,61,46,.18);
-  background:#fff;
-  padding:12px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.q strong{
-  color:var(--deep);
-  font-size:16px;
-}
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:4px 10px;
-  border-radius:999px;
-  border:1px solid rgba(11,61,46,.18);
+.challengeHeader{
+  padding:16px 20px;
   font-weight:900;
-  font-size:12px;
+  font-size:20px;
   color:var(--deep);
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.challengeHeader:hover{
   background:#e9f3ef;
 }
-.badge.off{
-  background:#f4f4f4;
-  color:#666;
-  border-color:#ddd;
-}
-.open{
-  background:linear-gradient(180deg, var(--mid), #16604a);
-  border:none;
-  color:#fff;
-  padding:8px 12px;
-  border-radius:12px;
-  font-weight:900;
-  cursor:pointer;
-}
-.open:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+
+.questions{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .4s ease;
+  padding:0 20px;
 }
 
-.sideList{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
+.questions.open{
+  max-height:500px;
+  padding-bottom:20px;
+}
+
+.qBtn{
+  display:block;
   margin-top:10px;
-}
-.item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid var(--stroke);
-  background:#fff;
-}
-.item span{
-  color:var(--deep);
+  padding:10px;
+  border-radius:12px;
+  background:linear-gradient(180deg,var(--mid),#16604a);
+  color:white;
+  text-decoration:none;
   font-weight:900;
-}
-.item code{
-  background:#f5f5f5;
-  padding:2px 6px;
-  border-radius:8px;
-  border:1px solid #eee;
+  text-align:center;
+  transition:.2s;
 }
 
-.footer{
-  position:relative;
-  padding: 0 22px 20px;
-  color:rgba(11,61,46,.75);
-  font-weight:800;
-}
-
-/* Modal PIN */
-.modalBack{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,.35);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:16px;
-}
-.modal{
-  width:min(520px, 100%);
-  background:#fff;
-  border-radius:18px;
-  border:1px solid #eee;
-  padding:16px;
-  box-shadow: 0 30px 80px rgba(0,0,0,.25);
-}
-.modal h3{ margin:0 0 10px 0; color:var(--deep); }
-.modal p{ margin:0 0 12px 0; color:#444; font-weight:700; }
-.row{ display:flex; gap:10px; }
-input{
-  flex:1;
-  padding:12px;
-  border-radius:14px;
-  border:1px solid #ddd;
-  font-weight:900;
-  outline:none;
-}
-input:focus{ border-color: rgba(11,61,46,.35); }
-.err{ color:#b00020; font-weight:900; margin-top:10px; display:none; }
-
-@media (max-width: 900px){
-  .content{ grid-template-columns: 1fr; }
-  .grid{ grid-template-columns: 1fr; }
+.qBtn:hover{
+  transform:translateY(-2px);
 }
 </style>
 </head>
 
 <body>
-<div class="shell" id="shell">
-  <div class="header">
-    <div class="brand">
-      <h1>جولات عطرية</h1>
-      <p>لوحة التحكم — افتح الأسئلة مباشرة وقت المسابقة</p>
-    </div>
 
-    <div class="topActions">
-      <button class="btn secondary" id="btnFullscreen">وضع العرض (Fullscreen)</button>
-      <button class="btn" id="btnLock">قفل / فتح</button>
-    </div>
-  </div>
+<div class="shell">
+  <h1>جولات عطرية</h1>
 
-  <div class="content">
-    <div class="card">
-      <h2>الأسئلة</h2>
-      <p class="small">اضغط “فتح” للدخول على السؤال. تقدر تخلي بعض الأسئلة “قريبًا” لين تجهزها.</p>
+  <!-- Generate 7 Challenges -->
+  <div id="container"></div>
 
-      <div class="grid" id="questionsGrid">
-        <!-- Q1 -->
-        <div class="q">
-          <div>
-            <strong>السؤال 1</strong>
-            <div class="badge" data-badge="q1">جاهز ✅</div>
-          </div>
-          <button class="open" data-target="q1.html">فتح</button>
-        </div>
-
-        <!-- Q2 -->
-        <div class="q">
-          <div>
-            <strong>السؤال 2</strong>
-            <div class="badge off" data-badge="q2">قريبًا</div>
-          </div>
-          <button class="open" data-target="q2.html" disabled>فتح</button>
-        </div>
-
-        <!-- Q3 -->
-        <div class="q">
-          <div>
-            <strong>السؤال 3</strong>
-            <div class="badge off" data-badge="q3">قريبًا</div>
-          </div>
-          <button class="open" data-target="q3.html" disabled>فتح</button>
-        </div>
-
-        <!-- Add more by copy/paste -->
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>ملاحظات سريعة</h2>
-      <div class="sideList">
-        <div class="item">
-          <span>تسمية الملفات</span>
-          <code>q1.html, q2.html ...</code>
-        </div>
-        <div class="item">
-          <span>ملفات الصور</span>
-          <code>pyramid-q1.png ...</code>
-        </div>
-        <div class="item">
-          <span>تحديثات فورية</span>
-          <code>Ctrl + F5</code>
-        </div>
-        <div class="item">
-          <span>ملاحظة</span>
-          <code>GitHub Pages</code>
-        </div>
-      </div>
-      <p class="small" style="margin-top:12px;">
-        إذا تبي تفتح سؤال من نفس التبويب ولا تبويب جديد؟ أنا خليتها تبويب جديد عشان ما تضيع اللوحة الرئيسية.
-      </p>
-    </div>
-  </div>
-
-  <div class="footer">
-    نصيحة: قبل المسابقة افتح الصفحة وسوِّ <b>Ctrl + F5</b> عشان ما يعلق على نسخة قديمة.
-  </div>
-</div>
-
-<!-- PIN Modal -->
-<div class="modalBack" id="modalBack">
-  <div class="modal">
-    <h3>رمز الدخول</h3>
-    <p>اكتب الرمز عشان تفتح الأسئلة.</p>
-    <div class="row">
-      <input id="pinInput" inputmode="numeric" placeholder="مثال: 1234" />
-      <button class="btn" id="pinOk">دخول</button>
-      <button class="btn secondary" id="pinCancel">إلغاء</button>
-    </div>
-    <div class="err" id="pinErr">الرمز غير صحيح</div>
-  </div>
 </div>
 
 <script>
-// =====================
-// إعدادات سريعة
-// =====================
+const container = document.getElementById("container");
 
-// 1) فعّل/طفي القفل بالـPIN
-const PIN_LOCK_ENABLED = true;        // <-- غيّرها إلى false لو ما تبي قفل
+for(let ch=1; ch<=7; ch++){
+  const block = document.createElement("div");
+  block.className = "challenge";
 
-// 2) رمز الدخول (غيّره للي تبي)
-const PIN_CODE = "2026";              // <-- غيّر الرقم هنا
+  const header = document.createElement("div");
+  header.className = "challengeHeader";
+  header.innerHTML = `
+    <span>التحدي ${ch}</span>
+    <span>▼</span>
+  `;
 
-// 3) فتح الأسئلة بتبويب جديد؟
-const OPEN_IN_NEW_TAB = true;
+  const qWrap = document.createElement("div");
+  qWrap.className = "questions";
 
-// =====================
-let unlocked = !PIN_LOCK_ENABLED;
+  for(let q=1; q<=4; q++){
+    const link = document.createElement("a");
+    link.className = "qBtn";
+    link.href = `Ch${ch}Q${q}.html`;
+    link.textContent = `السؤال ${q}`;
+    link.target = "_blank";
+    qWrap.appendChild(link);
+  }
 
-const modalBack = document.getElementById("modalBack");
-const pinInput  = document.getElementById("pinInput");
-const pinErr    = document.getElementById("pinErr");
-
-function setLockedState(){
-  // قفل/فتح أزرار "فتح"
-  document.querySelectorAll(".open").forEach(btn=>{
-    const disabledByDesign = btn.hasAttribute("disabled"); // بعض الأسئلة "قريبًا"
-    if (disabledByDesign) return;
-    btn.disabled = !unlocked;
-    btn.style.opacity = unlocked ? "1" : ".65";
-    btn.style.cursor = unlocked ? "pointer" : "not-allowed";
+  header.addEventListener("click", ()=>{
+    qWrap.classList.toggle("open");
   });
 
-  document.getElementById("btnLock").textContent = unlocked ? "قفل" : "فتح";
+  block.appendChild(header);
+  block.appendChild(qWrap);
+  container.appendChild(block);
 }
-
-function showPin(){
-  modalBack.style.display="flex";
-  pinInput.value="";
-  pinErr.style.display="none";
-  setTimeout(()=>pinInput.focus(), 50);
-}
-
-function hidePin(){
-  modalBack.style.display="none";
-}
-
-document.getElementById("btnLock").addEventListener("click", ()=>{
-  if (!PIN_LOCK_ENABLED) return;
-  if (unlocked){
-    unlocked = false;
-    setLockedState();
-  }else{
-    showPin();
-  }
-});
-
-document.getElementById("pinOk").addEventListener("click", ()=>{
-  if (pinInput.value.trim() === PIN_CODE){
-    unlocked = true;
-    hidePin();
-    setLockedState();
-  }else{
-    pinErr.style.display="block";
-  }
-});
-
-document.getElementById("pinCancel").addEventListener("click", hidePin);
-modalBack.addEventListener("click", (e)=>{ if(e.target===modalBack) hidePin(); });
-
-pinInput.addEventListener("keydown",(e)=>{
-  if(e.key==="Enter") document.getElementById("pinOk").click();
-});
-
-// فتح الأسئلة
-document.querySelectorAll(".open").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    if (btn.disabled) return;
-    const target = btn.getAttribute("data-target");
-    if (!target) return;
-
-    if (OPEN_IN_NEW_TAB) window.open(target, "_blank");
-    else window.location.href = target;
-  });
-});
-
-// Fullscreen
-document.getElementById("btnFullscreen").addEventListener("click", async ()=>{
-  const el = document.getElementById("shell");
-  if (!document.fullscreenElement){
-    try{ await el.requestFullscreen(); }catch(_){}
-  }else{
-    try{ await document.exitFullscreen(); }catch(_){}
-  }
-});
-
-// init
-setLockedState();
-
-// لو القفل شغال، افتح مقفول من البداية
-if (PIN_LOCK_ENABLED) unlocked = false;
-setLockedState();
 </script>
+
 </body>
 </html>

@@ -192,8 +192,9 @@ h1{
 </div>
 
 <script>
-// auth check
-if(sessionStorage.getItem("jawalat_authed") !== "1"){
+// ✅ auth check: session OR local
+const authed = (sessionStorage.getItem("jawalat_authed") === "1") || (localStorage.getItem("jawalat_authed") === "1");
+if(!authed){
   window.location.href = "index.html";
 }
 

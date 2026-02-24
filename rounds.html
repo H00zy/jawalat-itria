@@ -12,7 +12,6 @@
   --mid:#1F6B52;
   --card:#ffffffee;
   --stroke:#cfe1da;
-  --muted:#6f8d83;
   --danger1:#7c1f1f;
   --danger2:#5a1414;
 }
@@ -59,7 +58,7 @@ body{
   justify-content:space-between;
   gap:16px;
   flex-wrap:wrap;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .logo{
@@ -69,7 +68,7 @@ body{
   filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
 }
 
-.playerPill{
+.pill{
   background:#fff;
   border:1px solid var(--stroke);
   border-radius:999px;
@@ -81,6 +80,26 @@ body{
   gap:10px;
   flex-wrap:wrap;
   align-items:center;
+}
+
+.btn{
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1100;
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.15s;
+  text-decoration:none;
+  display:inline-block;
+}
+.btn:hover{ transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); opacity:.96; }
+
+.btn.danger{
+  border-color: rgba(124,31,31,.35);
+  background: linear-gradient(180deg, var(--danger1), var(--danger2));
 }
 
 h1{
@@ -143,7 +162,7 @@ h1{
   color: #556b63;
 }
 
-.btn{
+.cardBtn{
   margin-top:auto;
   width:100%;
   border:1px solid rgba(11,61,46,.25);
@@ -159,10 +178,10 @@ h1{
   display:block;
 }
 
-.btn:hover{ transform: translateY(-1px); }
-.btn:active{ transform: translateY(0); opacity:.96; }
+.cardBtn:hover{ transform: translateY(-1px); }
+.cardBtn:active{ transform: translateY(0); opacity:.96; }
 
-.btn.disabled{
+.cardBtn.disabled{
   cursor:not-allowed;
   background: linear-gradient(180deg, #a9bdb6, #93a9a2);
   border-color: rgba(11,61,46,.15);
@@ -185,66 +204,74 @@ h1{
 
   <div class="header">
     <img class="logo" src="images/logo.png" alt="جولات عطرية">
-    <div class="playerPill" id="playersPill">المتسابقين: —</div>
+    <div class="pill" id="playersPill">المتسابقين: —</div>
+    <button class="btn danger" id="newGameBtn">بدء لعبة جديدة</button>
   </div>
 
   <h1>اختر الجولة</h1>
 
   <div class="grid">
 
-    <!-- Round 1: Unknown Perfume -->
     <div class="card">
       <div class="badge">متاح الآن</div>
       <div class="cardTitle">جولة العطر المجهول</div>
       <div class="cardDesc">
-        لوحة تفاعلية: فتح أرقام + نظام نقاط + سترايك + كشف اسم العطر.
+        لوحة تفاعلية: فتح أرقام + نظام نقاط + خطأ + كشف اسم العطر.
       </div>
-      <a class="btn" href="challenges.html" id="goUnknown">ابدأ الجولة</a>
+      <a class="cardBtn" href="challenges.html" id="goUnknown">ابدأ الجولة</a>
     </div>
 
-    <!-- Round 2: Bell -->
     <div class="card">
       <div class="badge lock">قريبًا</div>
       <div class="cardTitle">جولة الجرس</div>
       <div class="cardDesc">
         سيتم تفعيلها لاحقًا بعد تصميم اللعبة الخاصة بها.
       </div>
-      <span class="btn disabled" aria-disabled="true">غير متاح</span>
+      <span class="cardBtn disabled" aria-disabled="true">غير متاح</span>
     </div>
 
-    <!-- Round 3: 30 seconds -->
     <div class="card">
       <div class="badge lock">قريبًا</div>
       <div class="cardTitle">جولة تحدي الـ٣٠ ثانية</div>
       <div class="cardDesc">
         سيتم تفعيلها لاحقًا بعد تصميم اللعبة الخاصة بها.
       </div>
-      <span class="btn disabled" aria-disabled="true">غير متاح</span>
+      <span class="cardBtn disabled" aria-disabled="true">غير متاح</span>
     </div>
 
   </div>
 
-  <div class="note">ملاحظة: إذا فتحت هذه الصفحة مباشرة بدون إدخال أسماء المتسابقين، سيتم عرض أسماء افتراضية.</div>
+  <div class="note">ملاحظة: زر "بدء لعبة جديدة" يصفر كل النتائج ويعيدك لصفحة إدخال أسماء المتسابقين.</div>
 
 </div>
 
 <script>
-/* Security/flow: if not authed, return to landing */
+// لو ما دخل من index
 if(sessionStorage.getItem("jawalat_authed") !== "1"){
   window.location.href = "index.html";
 }
 
-/* Show player names from session */
-const p1 = sessionStorage.getItem("jawalat_p1") || "لاعب 1";
-const p2 = sessionStorage.getItem("jawalat_p2") || "لاعب 2";
+const p1 = localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1";
+const p2 = localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "لاعب 2";
 document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
 
-/* Optional: protect challenges page flow if names missing */
-document.getElementById("goUnknown").addEventListener("click", (e)=>{
-  if(!sessionStorage.getItem("jawalat_p1") || !sessionStorage.getItem("jawalat_p2")){
-    // still allow, but you can enforce:
-    // e.preventDefault(); window.location.href="index.html";
-  }
+document.getElementById("newGameBtn").addEventListener("click", ()=>{
+  if(!confirm("أكيد تبغى تبدأ لعبة جديدة؟ سيتم تصفير النقاط وإعادة إدخال الأسماء.")) return;
+
+  // تصفير المجموع العام
+  localStorage.removeItem("jawalat_totals_v1");
+
+  // حذف الأسماء
+  localStorage.removeItem("jawalat_p1");
+  localStorage.removeItem("jawalat_p2");
+  sessionStorage.removeItem("jawalat_p1");
+  sessionStorage.removeItem("jawalat_p2");
+
+  // إلغاء الدخول
+  sessionStorage.removeItem("jawalat_authed");
+
+  // رجوع للاندنق
+  window.location.href = "index.html";
 });
 </script>
 </body>

@@ -3,51 +3,39 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>جولات عطرية - السؤال الأول</title>
+<title>جولات عطرية | صفحة المسابقة</title>
 
 <style>
 :root{
   --bg:#E6EEE9;
-  --box:#1F6B52;
-  --top:#0B3D2E;
-  --text:#0B3D2E;
-  --reveal:#ffffffee;
+  --deep:#0B3D2E;
+  --mid:#1F6B52;
+  --card:#ffffffee;
   --stroke:#cfe1da;
-  --glow: 0 0 0 2px rgba(11,61,46,.15), 0 10px 30px rgba(11,61,46,.18);
-  --glowStrong: 0 0 0 3px rgba(11,61,46,.25), 0 18px 40px rgba(11,61,46,.25);
-
-  /* Geometry */
-  --grid-top: 18%;
-  --grid-left: 6%;
-  --grid-width: 88%;
-  --grid-height: 36%;
-  --pyr-gap: 3%;
-  --frame-pad: 14px;
+  --shadow: 0 18px 55px rgba(0,0,0,.12);
 }
 
 *{ box-sizing:border-box; }
-
 body{
+  margin:0;
   font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
   background:#f4f4f4;
-  margin:0;
-  padding:20px;
+  padding:22px;
 }
 
-.stage{
-  width:min(1100px,100%);
-  aspect-ratio:16/9;
-  background: var(--bg);
+.shell{
+  max-width:1100px;
   margin:auto;
-  position:relative;
-  overflow:hidden;
+  background:var(--bg);
   border:1px solid var(--stroke);
-  border-radius:14px;
-  box-shadow: 0 18px 55px rgba(0,0,0,.12);
+  border-radius:18px;
+  box-shadow: var(--shadow);
+  overflow:hidden;
+  position:relative;
 }
 
 /* Soft pattern */
-.stage::before{
+.shell::before{
   content:"";
   position:absolute;
   inset:0;
@@ -58,456 +46,411 @@ body{
     repeating-radial-gradient(circle at 70% 65%,
       rgba(11,61,46,.05) 0 1px,
       transparent 1px 32px);
-  opacity:.50;
-  pointer-events:none;
-}
-.stage::after{
-  content:"";
-  position:absolute;
-  inset:-40px;
-  background: radial-gradient(circle at center, transparent 55%, rgba(0,0,0,.10) 110%);
+  opacity:.55;
   pointer-events:none;
 }
 
-/* Box 1 */
-.box1{
-  position:absolute;
-  top:22px;
-  left:50%;
-  transform:translateX(-50%);
-  width:46%;
-  height:9%;
-  background: linear-gradient(180deg, rgba(11,61,46,1), rgba(9,52,39,1));
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-weight:1000;
-  font-size:22px;
-  cursor:pointer;
-  user-select:none;
-  border-radius:12px;
-  box-shadow: var(--glow);
-  z-index:3;
-  padding: 0 14px;
-  text-align:center;
-}
-.box1:hover{ box-shadow: var(--glowStrong); transform:translateX(-50%) translateY(-1px); }
-.box1.revealed{ cursor:default; }
-.box1 span{ display:block; width:100%; }
-
-/* Main grid:
-   labelR | box(2/3/4) | labelL | box(5/6/7)  (left boxes wider)
-*/
-.mainGrid{
-  position:absolute;
-  top: var(--grid-top);
-  left: var(--grid-left);
-  width: var(--grid-width);
-  height: var(--grid-height);
-  display:grid;
-  grid-template-columns: 20% 16% 22% 30%;
-  grid-template-rows: repeat(3, 1fr);
-  gap:18px 18px;
-  align-items:center;
-  z-index:2;
-}
-
-.label{
-  font-weight:1000;
-  font-size:26px;
-  text-align:center;
-  color:var(--text);
-  text-shadow: 0 1px 0 rgba(255,255,255,.35);
-  pointer-events:none;
-}
-
-/* Game boxes */
-.gameBox{
-  background: linear-gradient(180deg, rgba(31,107,82,1), rgba(26,92,71,1));
-  color:#fff;
-  border-radius:12px;
-  cursor:pointer;
-  user-select:none;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  font-weight:1000;
-  padding:12px 14px;
-  min-height:56px;
-  box-shadow: var(--glow);
-  transform: translateY(0);
-  transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+.header{
   position:relative;
-  overflow:hidden;
-}
-.gameBox::before{
-  content:"";
-  position:absolute;
-  inset:-40% -60%;
-  background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,.22) 50%, transparent 60%);
-  transform: rotate(8deg);
-  opacity:.35;
-  pointer-events:none;
-}
-.gameBox:hover{ transform: translateY(-2px); box-shadow: var(--glowStrong); filter:saturate(1.05); }
-.gameBox:active{ transform: translateY(0px) scale(.995); }
-
-.gameBox .num{ font-size:22px; line-height:1; }
-
-.gameBox .clue{
-  display:none;
-  width:100%;
-  color:var(--text);
-  line-height:1.35;
-  white-space:pre-line;
-  font-size:16px; /* auto-fit down */
-}
-
-.gameBox.revealed{
-  background: var(--reveal);
-  color: var(--text);
-  cursor:default;
-  border:2px solid rgba(11,61,46,.35);
-  box-shadow: 0 0 0 3px rgba(11,61,46,.12), 0 16px 38px rgba(11,61,46,.18);
-  animation: pop .22s ease-out;
-}
-.gameBox.revealed::before{ opacity:.15; }
-.gameBox.revealed .num{ display:none; }
-.gameBox.revealed .clue{ display:block; }
-
-@keyframes pop{
-  0%{ transform: translateY(-2px) scale(.98); }
-  100%{ transform: translateY(0) scale(1); }
-}
-
-.gameBox.disabled{
-  pointer-events:none;
-  opacity:.65;
-  filter: grayscale(.15);
-  transform:none;
-}
-
-/* Pyramid image */
-.pyramidWrap{
-  position:absolute;
-  right: calc(var(--frame-pad) + 10px);
-  top: calc(var(--grid-top) + var(--grid-height) + var(--pyr-gap));
-  bottom: var(--frame-pad);
-  width:40%;
+  padding:22px 22px 14px 22px;
   display:flex;
-  align-items:flex-end;
-  justify-content:flex-end;
-  overflow:hidden;
-  pointer-events:none;
-  z-index:1;
-}
-.pyramidWrap img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  filter: drop-shadow(0 14px 26px rgba(0,0,0,.10));
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
 }
 
-/* HUD */
-.hud{
-  position:absolute;
-  left: var(--frame-pad);
-  top: 60%;
-  width:min(390px, 42%);
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.brand h1{
+  margin:0;
+  color:var(--deep);
+  font-size:34px;
+  letter-spacing:.3px;
+}
+.brand p{
+  margin:0;
+  color:rgba(11,61,46,.8);
+  font-weight:700;
+}
+
+.topActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-start;
+}
+
+.btn{
+  border:1px solid rgba(11,61,46,.22);
+  background:linear-gradient(180deg, var(--deep), #083528);
+  color:#fff;
+  padding:10px 14px;
+  border-radius:14px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow: 0 10px 28px rgba(11,61,46,.18);
+  transition: transform .12s ease, opacity .12s ease;
+}
+.btn:hover{ transform: translateY(-1px); }
+.btn:active{ transform: translateY(0); opacity:.95; }
+
+.btn.secondary{
+  background:#ffffffee;
+  color:var(--deep);
+  box-shadow:none;
+}
+
+.content{
+  position:relative;
+  padding: 14px 22px 22px;
+  display:grid;
+  grid-template-columns: 1.2fr .8fr;
+  gap:16px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:16px;
+  padding:16px;
+}
+
+.card h2{
+  margin:0 0 10px 0;
+  color:var(--deep);
+  font-size:18px;
+}
+.small{
+  color:rgba(11,61,46,.85);
+  font-weight:700;
+  margin:0;
+  line-height:1.6;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap:12px;
+  margin-top:12px;
+}
+
+.q{
+  border-radius:16px;
+  border:1px solid rgba(11,61,46,.18);
+  background:#fff;
+  padding:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.q strong{
+  color:var(--deep);
+  font-size:16px;
+}
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 10px;
+  border-radius:999px;
+  border:1px solid rgba(11,61,46,.18);
+  font-weight:900;
+  font-size:12px;
+  color:var(--deep);
+  background:#e9f3ef;
+}
+.badge.off{
+  background:#f4f4f4;
+  color:#666;
+  border-color:#ddd;
+}
+.open{
+  background:linear-gradient(180deg, var(--mid), #16604a);
+  border:none;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+}
+.open:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.sideList{
   display:flex;
   flex-direction:column;
   gap:10px;
-  z-index:3;
+  margin-top:10px;
 }
-.pill{
-  background: rgba(255,255,255,.92);
-  padding:8px 12px;
-  border-radius:999px;
-  font-weight:1000;
-  font-size:14px;
-  border:1px solid var(--stroke);
-  box-shadow: 0 8px 22px rgba(11,61,46,.10);
-  color:var(--text);
-}
-.btnRow{ display:flex; gap:10px; flex-wrap:wrap; }
-.btn{
-  padding:10px 14px;
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
   border-radius:14px;
-  border:1px solid rgba(11,61,46,.25);
-  background: linear-gradient(180deg, rgba(11,61,46,1), rgba(9,52,39,1));
-  color:#fff;
-  font-weight:1000;
-  cursor:pointer;
-  box-shadow: 0 10px 28px rgba(11,61,46,.18);
-  transition: transform .12s ease, box-shadow .2s ease, opacity .2s ease;
+  border:1px solid var(--stroke);
+  background:#fff;
 }
-.btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 34px rgba(11,61,46,.22); }
-.btn:active{ transform: translateY(0); opacity:.95; }
-.btn.danger{
-  background: linear-gradient(180deg, #7c1f1f, #5a1414);
-  border-color: rgba(124,31,31,.35);
+.item span{
+  color:var(--deep);
+  font-weight:900;
 }
-.msg{ font-weight:1000; font-size:14px; padding:4px 2px; color:var(--text); }
-.ok{ color:#0b6b0b; }
-.bad{ color:#b00020; }
+.item code{
+  background:#f5f5f5;
+  padding:2px 6px;
+  border-radius:8px;
+  border:1px solid #eee;
+}
 
-.strike{ font-size:18px; letter-spacing:2px; }
-.excl{
-  display:inline-block;
-  padding:2px 8px;
-  border-radius:999px;
-  background: rgba(176,0,32,.10);
-  color:#b00020;
-  border:1px solid rgba(176,0,32,.18);
-  font-size:12px;
-  margin-right:8px;
+.footer{
+  position:relative;
+  padding: 0 22px 20px;
+  color:rgba(11,61,46,.75);
+  font-weight:800;
+}
+
+/* Modal PIN */
+.modalBack{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.35);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+.modal{
+  width:min(520px, 100%);
+  background:#fff;
+  border-radius:18px;
+  border:1px solid #eee;
+  padding:16px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.25);
+}
+.modal h3{ margin:0 0 10px 0; color:var(--deep); }
+.modal p{ margin:0 0 12px 0; color:#444; font-weight:700; }
+.row{ display:flex; gap:10px; }
+input{
+  flex:1;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid #ddd;
+  font-weight:900;
+  outline:none;
+}
+input:focus{ border-color: rgba(11,61,46,.35); }
+.err{ color:#b00020; font-weight:900; margin-top:10px; display:none; }
+
+@media (max-width: 900px){
+  .content{ grid-template-columns: 1fr; }
+  .grid{ grid-template-columns: 1fr; }
 }
 </style>
 </head>
 
 <body>
-<div class="stage">
-
-  <div class="box1" id="box1" title="افتح اسم العطر"><span>1</span></div>
-
-  <div class="mainGrid">
-    <!-- Row 1 -->
-    <div class="label">الدار العطرية</div>
-    <div class="gameBox" data-id="2"><div class="num">2</div><div class="clue"></div></div>
-    <div class="label">الافتتاحية</div>
-    <div class="gameBox" data-id="5"><div class="num">5</div><div class="clue"></div></div>
-
-    <!-- Row 2 -->
-    <div class="label">العطار</div>
-    <div class="gameBox" data-id="3"><div class="num">3</div><div class="clue"></div></div>
-    <div class="label">قلب العطر</div>
-    <div class="gameBox" data-id="6"><div class="num">6</div><div class="clue"></div></div>
-
-    <!-- Row 3 -->
-    <div class="label">سنة الإصدار</div>
-    <div class="gameBox" data-id="4"><div class="num">4</div><div class="clue"></div></div>
-    <div class="label">المكونات الأساسية</div>
-    <div class="gameBox" data-id="7"><div class="num">7</div><div class="clue"></div></div>
-  </div>
-
-  <div class="pyramidWrap" aria-hidden="true">
-    <img src="pyramid-q1.png" alt="الانطباعات الرئيسية">
-  </div>
-
-  <div class="hud">
-    <div class="pill">الدور: <span id="turnName">لاعب 1</span></div>
-    <div class="pill">نقاط اللوحة: <span id="points">50</span></div>
-
-    <div class="pill">
-      لاعب 1: <span id="s1">0</span>
-      <span class="strike" id="strike1"></span>
-      <span id="ex1"></span>
+<div class="shell" id="shell">
+  <div class="header">
+    <div class="brand">
+      <h1>جولات عطرية</h1>
+      <p>لوحة التحكم — افتح الأسئلة مباشرة وقت المسابقة</p>
     </div>
 
-    <div class="pill">
-      لاعب 2: <span id="s2">0</span>
-      <span class="strike" id="strike2"></span>
-      <span id="ex2"></span>
+    <div class="topActions">
+      <button class="btn secondary" id="btnFullscreen">وضع العرض (Fullscreen)</button>
+      <button class="btn" id="btnLock">قفل / فتح</button>
     </div>
-
-    <div class="btnRow">
-      <button class="btn" id="strikeBtn">سترايك</button>
-      <button class="btn danger" id="resetBtn">RESET</button>
-    </div>
-
-    <div class="msg" id="msg"></div>
   </div>
 
+  <div class="content">
+    <div class="card">
+      <h2>الأسئلة</h2>
+      <p class="small">اضغط “فتح” للدخول على السؤال. تقدر تخلي بعض الأسئلة “قريبًا” لين تجهزها.</p>
+
+      <div class="grid" id="questionsGrid">
+        <!-- Q1 -->
+        <div class="q">
+          <div>
+            <strong>السؤال 1</strong>
+            <div class="badge" data-badge="q1">جاهز ✅</div>
+          </div>
+          <button class="open" data-target="q1.html">فتح</button>
+        </div>
+
+        <!-- Q2 -->
+        <div class="q">
+          <div>
+            <strong>السؤال 2</strong>
+            <div class="badge off" data-badge="q2">قريبًا</div>
+          </div>
+          <button class="open" data-target="q2.html" disabled>فتح</button>
+        </div>
+
+        <!-- Q3 -->
+        <div class="q">
+          <div>
+            <strong>السؤال 3</strong>
+            <div class="badge off" data-badge="q3">قريبًا</div>
+          </div>
+          <button class="open" data-target="q3.html" disabled>فتح</button>
+        </div>
+
+        <!-- Add more by copy/paste -->
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>ملاحظات سريعة</h2>
+      <div class="sideList">
+        <div class="item">
+          <span>تسمية الملفات</span>
+          <code>q1.html, q2.html ...</code>
+        </div>
+        <div class="item">
+          <span>ملفات الصور</span>
+          <code>pyramid-q1.png ...</code>
+        </div>
+        <div class="item">
+          <span>تحديثات فورية</span>
+          <code>Ctrl + F5</code>
+        </div>
+        <div class="item">
+          <span>ملاحظة</span>
+          <code>GitHub Pages</code>
+        </div>
+      </div>
+      <p class="small" style="margin-top:12px;">
+        إذا تبي تفتح سؤال من نفس التبويب ولا تبويب جديد؟ أنا خليتها تبويب جديد عشان ما تضيع اللوحة الرئيسية.
+      </p>
+    </div>
+  </div>
+
+  <div class="footer">
+    نصيحة: قبل المسابقة افتح الصفحة وسوِّ <b>Ctrl + F5</b> عشان ما يعلق على نسخة قديمة.
+  </div>
+</div>
+
+<!-- PIN Modal -->
+<div class="modalBack" id="modalBack">
+  <div class="modal">
+    <h3>رمز الدخول</h3>
+    <p>اكتب الرمز عشان تفتح الأسئلة.</p>
+    <div class="row">
+      <input id="pinInput" inputmode="numeric" placeholder="مثال: 1234" />
+      <button class="btn" id="pinOk">دخول</button>
+      <button class="btn secondary" id="pinCancel">إلغاء</button>
+    </div>
+    <div class="err" id="pinErr">الرمز غير صحيح</div>
+  </div>
 </div>
 
 <script>
-/* =========================
-   Q1 Data
-   ========================= */
-const board = {
-  perfumeName: "Kenzo Homme Indigo",
-  clues: {
-    2: "Kenzo",
-    3: "Quentin Bisch",
-    4: "2025",
-    5: "نسيم البحر",
-    6: "السوسن",
-    7: "الجلود، خشب الصندل، أكيغالاوود"
-  }
-};
+// =====================
+// إعدادات سريعة
+// =====================
 
-/* Scoring: start=50, each reveal -5 */
-const START_POINTS = 50;
-const REVEAL_PENALTY = 5;
-const MIN_POINTS = 5;
+// 1) فعّل/طفي القفل بالـPIN
+const PIN_LOCK_ENABLED = true;        // <-- غيّرها إلى false لو ما تبي قفل
 
-/* =========================
-   State
-   ========================= */
-let turn = 0;
-let scores = [0,0];
-let strikes = [0,0];
-let revealedCount = 0;
-let roundEnded = false;
+// 2) رمز الدخول (غيّره للي تبي)
+const PIN_CODE = "2026";              // <-- غيّر الرقم هنا
 
-/* Elements */
-const el = {
-  box1: document.getElementById("box1"),
-  turnName: document.getElementById("turnName"),
-  points: document.getElementById("points"),
-  s1: document.getElementById("s1"),
-  s2: document.getElementById("s2"),
-  strike1: document.getElementById("strike1"),
-  strike2: document.getElementById("strike2"),
-  ex1: document.getElementById("ex1"),
-  ex2: document.getElementById("ex2"),
-  msg: document.getElementById("msg"),
-  strikeBtn: document.getElementById("strikeBtn"),
-  resetBtn: document.getElementById("resetBtn"),
-};
+// 3) فتح الأسئلة بتبويب جديد؟
+const OPEN_IN_NEW_TAB = true;
 
-function calcPoints(){
-  return Math.max(MIN_POINTS, START_POINTS - (revealedCount * REVEAL_PENALTY));
-}
-function setMsg(html){ el.msg.innerHTML = html || ""; }
-function isExcluded(p){ return strikes[p] >= 2; }
+// =====================
+let unlocked = !PIN_LOCK_ENABLED;
 
-function updateHUD(){
-  if (!roundEnded && isExcluded(turn) && !isExcluded(1-turn)) turn = 1 - turn;
+const modalBack = document.getElementById("modalBack");
+const pinInput  = document.getElementById("pinInput");
+const pinErr    = document.getElementById("pinErr");
 
-  el.turnName.textContent = (turn===0) ? "لاعب 1" : "لاعب 2";
-  el.points.textContent = roundEnded ? 0 : calcPoints();
-  el.s1.textContent = scores[0];
-  el.s2.textContent = scores[1];
-
-  // ✅ strikes as red circles
-  el.strike1.textContent = "🔴".repeat(strikes[0]);
-  el.strike2.textContent = "🔴".repeat(strikes[1]);
-
-  el.ex1.innerHTML = isExcluded(0) ? `<span class="excl">مستبعد</span>` : "";
-  el.ex2.innerHTML = isExcluded(1) ? `<span class="excl">مستبعد</span>` : "";
-
-  if (!roundEnded && isExcluded(0) && isExcluded(1)) endRoundNoPoints();
-}
-
-function fitTextToBox(container, minPx=12, maxPx=18){
-  container.style.fontSize = maxPx + "px";
-  for(let fs=maxPx; fs>=minPx; fs--){
-    container.style.fontSize = fs + "px";
-    if (container.scrollHeight <= container.clientHeight + 1) return;
-  }
-}
-
-function revealAll(){
-  document.querySelectorAll(".gameBox").forEach(box=>{
-    const id = +box.dataset.id;
-    box.classList.add("revealed","disabled");
-    const clueEl = box.querySelector(".clue");
-    clueEl.textContent = board.clues[id] ?? "—";
-    requestAnimationFrame(()=>fitTextToBox(clueEl, 12, 18));
+function setLockedState(){
+  // قفل/فتح أزرار "فتح"
+  document.querySelectorAll(".open").forEach(btn=>{
+    const disabledByDesign = btn.hasAttribute("disabled"); // بعض الأسئلة "قريبًا"
+    if (disabledByDesign) return;
+    btn.disabled = !unlocked;
+    btn.style.opacity = unlocked ? "1" : ".65";
+    btn.style.cursor = unlocked ? "pointer" : "not-allowed";
   });
 
-  const span = el.box1.querySelector("span");
-  span.textContent = board.perfumeName;
-  el.box1.classList.add("revealed");
-  requestAnimationFrame(()=>fitTextToBox(span, 14, 24));
+  document.getElementById("btnLock").textContent = unlocked ? "قفل" : "فتح";
 }
 
-function endRoundNoPoints(){
-  roundEnded = true;
-  revealAll();
-  setMsg(`<span class="bad">السؤال صفر نقاط (اللاعبين مستبعدين)</span>`);
-  updateHUD();
+function showPin(){
+  modalBack.style.display="flex";
+  pinInput.value="";
+  pinErr.style.display="none";
+  setTimeout(()=>pinInput.focus(), 50);
 }
 
-function switchTurnAfterAction(){
-  if (isExcluded(0) && isExcluded(1)){
-    endRoundNoPoints();
-    return;
+function hidePin(){
+  modalBack.style.display="none";
+}
+
+document.getElementById("btnLock").addEventListener("click", ()=>{
+  if (!PIN_LOCK_ENABLED) return;
+  if (unlocked){
+    unlocked = false;
+    setLockedState();
+  }else{
+    showPin();
   }
-  turn = 1 - turn;
-  if (isExcluded(turn)) turn = 1 - turn;
-  updateHUD();
-}
-
-/* Box 1 */
-el.box1.addEventListener("click", ()=>{
-  if (roundEnded) return;
-  if (isExcluded(turn)) return;
-
-  scores[turn] += calcPoints();   // no penalty
-  roundEnded = true;
-  revealAll();
-  setMsg(`<span class="ok">تم فتح اسم العطر ✅ نقاط احتُسبت للاعب الحالي</span>`);
-  updateHUD();
 });
 
-/* Boxes 2-7 */
-document.querySelectorAll(".gameBox").forEach(box=>{
-  box.addEventListener("click", ()=>{
-    if (roundEnded) return;
-    if (isExcluded(turn)) return;
-    if (box.classList.contains("revealed")) return;
+document.getElementById("pinOk").addEventListener("click", ()=>{
+  if (pinInput.value.trim() === PIN_CODE){
+    unlocked = true;
+    hidePin();
+    setLockedState();
+  }else{
+    pinErr.style.display="block";
+  }
+});
 
-    const id = +box.dataset.id;
-    box.classList.add("revealed","disabled");
-    const clueEl = box.querySelector(".clue");
-    clueEl.textContent = board.clues[id] ?? "—";
+document.getElementById("pinCancel").addEventListener("click", hidePin);
+modalBack.addEventListener("click", (e)=>{ if(e.target===modalBack) hidePin(); });
 
-    revealedCount++;
-    setMsg(`انفتح رقم <b>${id}</b> (-${REVEAL_PENALTY}). الدور للخصم.`);
-    requestAnimationFrame(()=>fitTextToBox(clueEl, 12, 18));
+pinInput.addEventListener("keydown",(e)=>{
+  if(e.key==="Enter") document.getElementById("pinOk").click();
+});
 
-    switchTurnAfterAction();
+// فتح الأسئلة
+document.querySelectorAll(".open").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    if (btn.disabled) return;
+    const target = btn.getAttribute("data-target");
+    if (!target) return;
+
+    if (OPEN_IN_NEW_TAB) window.open(target, "_blank");
+    else window.location.href = target;
   });
 });
 
-/* Strike */
-el.strikeBtn.addEventListener("click", ()=>{
-  if (roundEnded) return;
-  if (isExcluded(turn)) return;
-
-  strikes[turn]++;
-
-  if (isExcluded(turn)){
-    setMsg(`<span class="bad">سترايك 🔴 اللاعب ${(turn===0)?1:2} صار مستبعد من السؤال.</span>`);
-  } else {
-    setMsg(`<span class="bad">سترايك 🔴 الدور للخصم.</span>`);
+// Fullscreen
+document.getElementById("btnFullscreen").addEventListener("click", async ()=>{
+  const el = document.getElementById("shell");
+  if (!document.fullscreenElement){
+    try{ await el.requestFullscreen(); }catch(_){}
+  }else{
+    try{ await document.exitFullscreen(); }catch(_){}
   }
-
-  // ALWAYS switch turn after strike
-  switchTurnAfterAction();
 });
 
-/* RESET (single-question mode: reset EVERYTHING including scores) */
-el.resetBtn.addEventListener("click", ()=>{
-  turn = 0;
-  scores = [0,0];         // ✅ reset players scores
-  strikes = [0,0];
-  revealedCount = 0;
-  roundEnded = false;
-  setMsg("");
+// init
+setLockedState();
 
-  // reset box1
-  const span = el.box1.querySelector("span");
-  span.textContent = "1";
-  span.style.fontSize = "";
-  el.box1.classList.remove("revealed");
-
-  // reset boxes 2-7
-  document.querySelectorAll(".gameBox").forEach(box=>{
-    box.classList.remove("revealed","disabled");
-    const clueEl = box.querySelector(".clue");
-    clueEl.textContent = "";
-    clueEl.style.fontSize = "";
-  });
-
-  updateHUD();
-});
-
-updateHUD();
+// لو القفل شغال، افتح مقفول من البداية
+if (PIN_LOCK_ENABLED) unlocked = false;
+setLockedState();
 </script>
 </body>
 </html>

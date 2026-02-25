@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>اختيار الجولة - جولات عطرية</title>
+<title>جولات عطرية - اختيار الجولة</title>
 
 <style>
 :root{
@@ -12,8 +12,6 @@
   --mid:#1F6B52;
   --card:#ffffffee;
   --stroke:#cfe1da;
-  --danger1:#7c1f1f;
-  --danger2:#5a1414;
 }
 
 *{box-sizing:border-box}
@@ -51,31 +49,31 @@ body{
   pointer-events:none;
 }
 
-.header{
+.topbar{
   position:relative;
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:16px;
+  align-items:center;
+  gap:12px;
   flex-wrap:wrap;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
 
 .logo{
-  width:min(360px, 92vw);
+  width:min(260px, 70vw);
   height:auto;
   display:block;
   filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
 }
 
 .pill{
-  background:#fff;
+  background: rgba(255,255,255,.92);
   border:1px solid var(--stroke);
   border-radius:999px;
   padding:10px 12px;
   font-weight:1000;
   color:var(--deep);
-  box-shadow:0 10px 26px rgba(0,0,0,.08);
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
   display:flex;
   gap:10px;
   flex-wrap:wrap;
@@ -91,34 +89,31 @@ body{
   border-radius:14px;
   cursor:pointer;
   transition:.15s;
-  text-decoration:none;
-  display:inline-block;
 }
-.btn:hover{ transform: translateY(-1px); }
-.btn:active{ transform: translateY(0); opacity:.96; }
+.btn:hover{ transform:translateY(-1px); }
+
+.btn.secondary{
+  background:#fff;
+  color:var(--deep);
+}
 
 .btn.danger{
+  background: linear-gradient(180deg, #7c1f1f, #5a1414);
   border-color: rgba(124,31,31,.35);
-  background: linear-gradient(180deg, var(--danger1), var(--danger2));
 }
 
 h1{
   position:relative;
-  margin: 6px 0 16px 0;
+  margin:8px 0 10px 0;
   color:var(--deep);
-  font-weight:1100;
-  font-size:30px;
+  font-size:34px;
 }
 
 .grid{
   position:relative;
   display:grid;
   grid-template-columns: repeat(3, minmax(0,1fr));
-  gap:14px;
-}
-
-@media (max-width: 950px){
-  .grid{ grid-template-columns: 1fr; }
+  gap:12px;
 }
 
 .card{
@@ -127,74 +122,45 @@ h1{
   border-radius:18px;
   padding:18px;
   box-shadow:0 14px 40px rgba(0,0,0,.08);
-  min-height: 190px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
 }
 
-.cardTitle{
-  font-size:22px;
-  font-weight:1100;
+.card h2{
+  margin:0 0 8px 0;
   color:var(--deep);
+  font-size:20px;
+  font-weight:1200;
 }
 
-.cardDesc{
-  color:rgba(11,61,46,.82);
+.card p{
+  margin:0;
+  color:rgba(11,61,46,.85);
   font-weight:900;
   line-height:1.5;
 }
 
-.badge{
-  align-self:flex-start;
-  background: rgba(31,107,82,.10);
-  border: 1px solid rgba(31,107,82,.20);
-  color: var(--mid);
-  font-weight:1100;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-}
-
-.badge.lock{
-  background: rgba(120,120,120,.10);
-  border-color: rgba(120,120,120,.18);
-  color: #556b63;
-}
-
-.cardBtn{
-  margin-top:auto;
+.optionBtn{
+  margin-top:14px;
   width:100%;
+  padding:12px 14px;
+  border-radius:14px;
   border:1px solid rgba(11,61,46,.25);
   background: linear-gradient(180deg, var(--mid), #16604a);
   color:#fff;
   font-weight:1100;
-  padding:12px 14px;
-  border-radius:14px;
   cursor:pointer;
   transition:.15s;
-  text-decoration:none;
-  text-align:center;
-  display:block;
 }
+.optionBtn:hover{ transform: translateY(-1px); }
 
-.cardBtn:hover{ transform: translateY(-1px); }
-.cardBtn:active{ transform: translateY(0); opacity:.96; }
-
-.cardBtn.disabled{
+.optionBtn.disabled{
+  background: #9fb6ae;
+  border-color: rgba(11,61,46,.12);
   cursor:not-allowed;
-  background: linear-gradient(180deg, #a9bdb6, #93a9a2);
-  border-color: rgba(11,61,46,.15);
-  color:#f6fbf9;
-  transform:none;
+  pointer-events:none;
 }
 
-.note{
-  position:relative;
-  margin-top:14px;
-  color:rgba(11,61,46,.75);
-  font-weight:900;
-  font-size:13px;
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -202,76 +168,109 @@ h1{
 <body>
 <div class="shell">
 
-  <div class="header">
+  <div class="topbar">
     <img class="logo" src="images/logo.png" alt="جولات عطرية">
     <div class="pill" id="playersPill">المتسابقين: —</div>
+    <div class="pill" id="totalsPill">النقاط: —</div>
     <button class="btn danger" id="newGameBtn">بدء لعبة جديدة</button>
+    <button class="btn secondary" id="logoutBtn">تسجيل خروج</button>
   </div>
 
-  <h1>اختر الجولة</h1>
+  <h1>اختيار الجولة</h1>
 
   <div class="grid">
-
     <div class="card">
-      <div class="badge">متاح الآن</div>
-      <div class="cardTitle">جولة العطر المجهول</div>
-      <div class="cardDesc">
-        لوحة تفاعلية: فتح أرقام + نظام نقاط + خطأ + كشف اسم العطر.
-      </div>
-      <a class="cardBtn" href="challenges.html" id="goUnknown">ابدأ الجولة</a>
+      <h2>جولة العطر المجهول</h2>
+      <p>التحديات (7) — لكل تحدي 4 أسئلة.</p>
+      <button class="optionBtn" id="goUnknown">دخول الجولة</button>
     </div>
 
     <div class="card">
-      <div class="badge lock">قريبًا</div>
-      <div class="cardTitle">جولة الجرس</div>
-      <div class="cardDesc">
-        سيتم تفعيلها لاحقًا بعد تصميم اللعبة الخاصة بها.
-      </div>
-      <span class="cardBtn disabled" aria-disabled="true">غير متاح</span>
+      <h2>جولة الجرس</h2>
+      <p>قريبًا…</p>
+      <button class="optionBtn disabled">غير متاح الآن</button>
     </div>
 
     <div class="card">
-      <div class="badge lock">قريبًا</div>
-      <div class="cardTitle">جولة تحدي الـ٣٠ ثانية</div>
-      <div class="cardDesc">
-        سيتم تفعيلها لاحقًا بعد تصميم اللعبة الخاصة بها.
-      </div>
-      <span class="cardBtn disabled" aria-disabled="true">غير متاح</span>
+      <h2>جولة تحدي الـ٣٠ ثانية</h2>
+      <p>قريبًا…</p>
+      <button class="optionBtn disabled">غير متاح الآن</button>
     </div>
-
   </div>
-
-  <div class="note">ملاحظة: زر "بدء لعبة جديدة" يصفر كل النتائج ويعيدك لصفحة إدخال أسماء المتسابقين.</div>
 
 </div>
 
 <script>
-// لو ما دخل من index
-if(sessionStorage.getItem("jawalat_authed") !== "1"){
+/* auth: session OR local */
+const authed =
+  sessionStorage.getItem("jawalat_authed") === "1" ||
+  localStorage.getItem("jawalat_authed") === "1";
+
+if(!authed){
   window.location.href = "index.html";
 }
 
-const p1 = localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1";
-const p2 = localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "لاعب 2";
+/* players */
+const p1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1").trim();
+const p2 = (localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "لاعب 2").trim();
 document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
 
+/* totals */
+function getTotals(){
+  const raw = localStorage.getItem("jawalat_totals_v1");
+  if(!raw) return [0,0];
+  try{
+    const parsed = JSON.parse(raw);
+    if(parsed?.totals?.length === 2) return parsed.totals;
+  }catch(e){}
+  return [0,0];
+}
+const totals = getTotals();
+document.getElementById("totalsPill").textContent =
+  `النقاط: ${p1} (${totals[0]}) — ${p2} (${totals[1]})`;
+
+/* بدء لعبة جديدة:
+   - يصفر النقاط + المقفولات
+   - يرجع لصفحة الأسماء
+   - ويعبي نفس الأسماء تلقائيًا (تقدر تغيرها)
+*/
 document.getElementById("newGameBtn").addEventListener("click", ()=>{
-  if(!confirm("أكيد تبغى تبدأ لعبة جديدة؟ سيتم تصفير النقاط وإعادة إدخال الأسماء.")) return;
-
-  // تصفير المجموع العام
   localStorage.removeItem("jawalat_totals_v1");
+  localStorage.removeItem("jawalat_locked_v1");
 
-  // حذف الأسماء
+  // ارجع مباشرة لكتابة الأسماء (Step 2) مع تعبئة أسماء سابقة
+  localStorage.setItem("jawalat_force_names", "1");
+
+  window.location.href = "index.html";
+});
+
+/* تسجيل خروج:
+   - يحذف كل شيء (كأن أول مرة)
+*/
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  // auth
+  localStorage.removeItem("jawalat_authed");
+  sessionStorage.removeItem("jawalat_authed");
+
+  // names
   localStorage.removeItem("jawalat_p1");
   localStorage.removeItem("jawalat_p2");
   sessionStorage.removeItem("jawalat_p1");
   sessionStorage.removeItem("jawalat_p2");
 
-  // إلغاء الدخول
-  sessionStorage.removeItem("jawalat_authed");
+  // game data
+  localStorage.removeItem("jawalat_totals_v1");
+  localStorage.removeItem("jawalat_locked_v1");
 
-  // رجوع للاندنق
+  // flags
+  localStorage.removeItem("jawalat_force_names");
+
   window.location.href = "index.html";
+});
+
+/* دخول جولة العطر المجهول */
+document.getElementById("goUnknown").addEventListener("click", ()=>{
+  window.location.href = "challenges.html";
 });
 </script>
 </body>

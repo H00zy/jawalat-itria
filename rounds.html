@@ -109,7 +109,7 @@ h1{
   font-size:34px;
 }
 
-/* ✅ رجع شكل الكروت مثل قبل */
+/* ✅ شكل الكروت */
 .grid{
   position:relative;
   display:grid;
@@ -160,13 +160,6 @@ h1{
 }
 .optionBtn:hover{ transform:translateY(-1px); }
 
-.optionBtn.disabled{
-  background:#9fb6ae;
-  border-color:rgba(11,61,46,.12);
-  cursor:not-allowed;
-  pointer-events:none;
-}
-
 @media (max-width: 900px){
   .grid{ grid-template-columns: 1fr; }
 }
@@ -196,13 +189,13 @@ h1{
     <div class="card">
       <h2>جولة الجرس</h2>
       <p>جولة سرعة وتحدّي: أول لاعب يضغط الجرس يجاوب خلال وقت محدد. إجابة صحيحة = نقاط، وخطأ = الدور للثاني.</p>
-      <button class="optionBtn disabled">غير متاح الآن</button>
+      <button class="optionBtn" id="goBell">دخول الجولة</button>
     </div>
 
     <div class="card">
       <h2>جولة تحدي الـ٣٠ ثانية</h2>
       <p>تحدي سريع: عندك ٣٠ ثانية تذكر أكبر عدد ممكن (مكونات/عطور/تصنيفات حسب السؤال). كل إجابة صحيحة تحتسب نقاط.</p>
-      <button class="optionBtn disabled">غير متاح الآن</button>
+      <button class="optionBtn" id="go30">دخول الجولة</button>
     </div>
   </div>
 
@@ -237,49 +230,35 @@ const totals = getTotals();
 document.getElementById("totalsPill").textContent =
   `النقاط: ${p1} (${totals[0]}) — ${p2} (${totals[1]})`;
 
-/* بدء لعبة جديدة:
-   - يصفر النقاط + المقفولات
-   - يرجع لصفحة الأسماء
-   - ويعبي نفس الأسماء تلقائيًا (تقدر تغيرها)
-*/
+/* بدء لعبة جديدة */
 document.getElementById("newGameBtn").addEventListener("click", ()=>{
   localStorage.removeItem("jawalat_totals_v1");
   localStorage.removeItem("jawalat_locked_v1");
-
-  // ارجع مباشرة لكتابة الأسماء (Step 2) مع تعبئة أسماء سابقة
   localStorage.setItem("jawalat_force_names", "1");
-
   window.location.href = "index.html";
 });
 
-/* تسجيل خروج:
-   - يحذف كل شيء (كأن أول مرة)
-*/
+/* تسجيل خروج (يمسح كل شيء) */
 document.getElementById("logoutBtn").addEventListener("click", ()=>{
-  // auth
   localStorage.removeItem("jawalat_authed");
   sessionStorage.removeItem("jawalat_authed");
 
-  // names
   localStorage.removeItem("jawalat_p1");
   localStorage.removeItem("jawalat_p2");
   sessionStorage.removeItem("jawalat_p1");
   sessionStorage.removeItem("jawalat_p2");
 
-  // game data
   localStorage.removeItem("jawalat_totals_v1");
   localStorage.removeItem("jawalat_locked_v1");
-
-  // flags
   localStorage.removeItem("jawalat_force_names");
 
   window.location.href = "index.html";
 });
 
-/* دخول جولة العطر المجهول */
-document.getElementById("goUnknown").addEventListener("click", ()=>{
-  window.location.href = "challenges.html";
-});
+/* دخول الجولات */
+document.getElementById("goUnknown").addEventListener("click", ()=> window.location.href = "challenges.html");
+document.getElementById("goBell").addEventListener("click", ()=> window.location.href = "bell.html");
+document.getElementById("go30").addEventListener("click", ()=> window.location.href = "thirty.html");
 </script>
 </body>
 </html>

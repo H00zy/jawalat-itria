@@ -199,7 +199,7 @@ function showStep(n){
   nameMsg.textContent = "";
 }
 
-/* ✅ عبّي الأسماء لو محفوظة (حتى لو رجعت للصفحة لأي سبب) */
+/* ✅ يعبي الأسماء لو محفوظة (ميزة “بدء لعبة جديدة” وغيرها) */
 function fillSavedNames(){
   const saved1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "").trim();
   const saved2 = (localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "").trim();
@@ -213,7 +213,6 @@ document.getElementById("checkBtn").addEventListener("click", ()=>{
     return;
   }
 
-  // ✅ حفظ auth في الاثنين (عشان التبويبات المختلفة)
   sessionStorage.setItem("jawalat_authed", "1");
   localStorage.setItem("jawalat_authed", "1");
 
@@ -241,7 +240,6 @@ document.getElementById("startBtn").addEventListener("click", ()=>{
     return;
   }
 
-  // ✅ تخزين الأسماء في الاثنين
   sessionStorage.setItem("jawalat_p1", n1);
   sessionStorage.setItem("jawalat_p2", n2);
 
@@ -251,13 +249,23 @@ document.getElementById("startBtn").addEventListener("click", ()=>{
   window.location.href = "rounds.html";
 });
 
-/* ✅ لو سبق الدخول، افتح خطوة الأسماء مباشرة */
-if(
-  sessionStorage.getItem("jawalat_authed") === "1" ||
-  localStorage.getItem("jawalat_authed") === "1"
-){
+/* ✅ لو تم عمل “بدء لعبة جديدة” نفتح مباشرة خطوة الأسماء */
+if(localStorage.getItem("jawalat_force_names") === "1"){
+  localStorage.removeItem("jawalat_force_names");
+  // نعتبره داخل اللعبة بدون كلمة مرور مرة ثانية
+  sessionStorage.setItem("jawalat_authed", "1");
+  localStorage.setItem("jawalat_authed", "1");
   showStep(2);
   fillSavedNames();
+}else{
+  // لو سبق الدخول عادي نفتح الأسماء مباشرة
+  if(
+    sessionStorage.getItem("jawalat_authed") === "1" ||
+    localStorage.getItem("jawalat_authed") === "1"
+  ){
+    showStep(2);
+    fillSavedNames();
+  }
 }
 </script>
 </body>

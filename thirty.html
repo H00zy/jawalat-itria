@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>جولة تحدي الـ٣٠ ثانية</title>
+
+<style>
+:root{
+  --bg:#E6EEE9;
+  --deep:#0B3D2E;
+  --mid:#1F6B52;
+  --card:#ffffffee;
+  --stroke:#cfe1da;
+  --danger:#7c1f1f;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+  background:#f4f4f4;
+  padding:22px;
+}
+
+.shell{
+  max-width:1100px;
+  margin:auto;
+  background:var(--bg);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.shell::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    repeating-radial-gradient(circle at 30% 30%,
+      rgba(11,61,46,.06) 0 1px,
+      transparent 1px 28px),
+    repeating-radial-gradient(circle at 70% 65%,
+      rgba(11,61,46,.05) 0 1px,
+      transparent 1px 32px);
+  opacity:.55;
+  pointer-events:none;
+}
+
+.topbar{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.logo{
+  width:min(220px, 70vw);
+  height:auto;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
+}
+
+.pill{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius:999px;
+  padding:10px 12px;
+  font-weight:1000;
+  color:var(--deep);
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.btn{
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1100;
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.15s;
+}
+.btn:hover{ transform:translateY(-1px); }
+
+.btn.secondary{
+  background:#fff;
+  color:var(--deep);
+}
+
+.grid{
+  position:relative;
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap:16px;
+  align-items:start;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 14px 40px rgba(0,0,0,.08);
+}
+
+.h1{
+  margin:0 0 10px 0;
+  color:var(--deep);
+  font-size:28px;
+  font-weight:1200;
+}
+
+.help{
+  margin:0;
+  color:rgba(11,61,46,.85);
+  font-weight:900;
+  line-height:1.7;
+}
+
+.bigTimer{
+  margin-top:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:120px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--stroke);
+  font-size:56px;
+  font-weight:1200;
+  color:var(--deep);
+  box-shadow: inset 0 0 0 4px rgba(11,61,46,.05);
+}
+
+.select, .input{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  font-weight:1000;
+  outline:none;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.ok{
+  background: linear-gradient(180deg, #1F6B52, #16604a);
+  color:#fff;
+}
+
+.no{
+  background: linear-gradient(180deg, #7c1f1f, #5a1414);
+  border-color: rgba(124,31,31,.35);
+  color:#fff;
+}
+
+.status{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid var(--stroke);
+  font-weight:1100;
+  color:var(--deep);
+}
+
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <img class="logo" src="images/logo.png" alt="جولات عطرية">
+    <div class="pill" id="playersPill">المتسابقين: —</div>
+    <div class="pill" id="totalsPill">النقاط: —</div>
+    <a class="btn secondary" href="rounds.html">رجوع للجولات</a>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="h1">جولة تحدي الـ٣٠ ثانية</div>
+      <p class="help">
+        اختر اللاعب ثم اضغط “ابدأ 30 ثانية”. بعد انتهاء الوقت أدخل <b>عدد/نقاط</b> الإجابات الصحيحة ثم “تثبيت النقاط”.
+      </p>
+
+      <div class="bigTimer" id="timer">30</div>
+
+      <div class="actions">
+        <button class="btn" id="startBtn">ابدأ 30 ثانية</button>
+        <button class="btn secondary" id="resetBtn">إعادة السؤال</button>
+      </div>
+
+      <div class="status" id="status">جاهز.</div>
+    </div>
+
+    <div class="card">
+      <div class="h1">لوحة التحكم</div>
+
+      <label class="help" style="display:block; margin-top:6px;">اختيار اللاعب</label>
+      <select class="select" id="playerSel">
+        <option value="0">—</option>
+      </select>
+
+      <label class="help" style="display:block; margin-top:10px;">نوع التحدي (اختياري)</label>
+      <select class="select" id="typeSel">
+        <option value="">— بدون —</option>
+        <option>مكونات</option>
+        <option>أسماء عطور</option>
+        <option>دور عطرية</option>
+        <option>عطور من نفس العائلة</option>
+        <option>تصنيفات / نوتات</option>
+      </select>
+
+      <label class="help" style="display:block; margin-top:10px;">النقاط المراد إضافتها</label>
+      <input class="input" id="points" type="number" min="0" step="1" value="10"/>
+
+      <div class="actions">
+        <button class="btn ok" id="commitBtn">✅ تثبيت النقاط</button>
+        <button class="btn no" id="clearBtn">تفريغ</button>
+      </div>
+
+      <div class="status" style="margin-top:12px;">
+        تلميح: لو تحب يكون “عدد الإجابات الصحيحة” × (قيمة ثابتة)، قلّي ونحوّلها تلقائي.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* auth */
+const authed = (sessionStorage.getItem("jawalat_authed")==="1") || (localStorage.getItem("jawalat_authed")==="1");
+if(!authed) window.location.href="index.html";
+
+/* players */
+const p1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1").trim();
+const p2 = (localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "لاعب 2").trim();
+
+document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
+
+/* totals */
+function getTotals(){
+  const raw = localStorage.getItem("jawalat_totals_v1");
+  if(!raw) return [0,0];
+  try{ const obj = JSON.parse(raw); if(obj?.totals?.length===2) return obj.totals; }catch(e){}
+  return [0,0];
+}
+function setTotals(t){
+  localStorage.setItem("jawalat_totals_v1", JSON.stringify({ totals:t }));
+}
+function renderTotals(){
+  const t = getTotals();
+  document.getElementById("totalsPill").textContent = `النقاط: ${p1} (${t[0]}) — ${p2} (${t[1]})`;
+}
+renderTotals();
+
+/* player select */
+const playerSel = document.getElementById("playerSel");
+playerSel.innerHTML = `
+  <option value="" selected>اختر اللاعب...</option>
+  <option value="0">${p1}</option>
+  <option value="1">${p2}</option>
+`;
+
+/* timer */
+let left = 30;
+let timerId = null;
+
+function renderTimer(){ document.getElementById("timer").textContent = String(left); }
+function stopTimer(){ if(timerId){ clearInterval(timerId); timerId=null; } }
+function startTimer(){
+  stopTimer();
+  left = 30;
+  renderTimer();
+  document.getElementById("status").textContent = "⏱️ بدأ الوقت!";
+  timerId = setInterval(()=>{
+    left -= 1;
+    renderTimer();
+    if(left<=0){
+      stopTimer();
+      document.getElementById("status").textContent = "⏱️ انتهى الوقت";
+    }
+  }, 1000);
+}
+
+document.getElementById("startBtn").addEventListener("click", startTimer);
+
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  stopTimer();
+  left = 30;
+  renderTimer();
+  document.getElementById("status").textContent = "تمت إعادة السؤال — جاهز.";
+});
+
+document.getElementById("commitBtn").addEventListener("click", ()=>{
+  const v = playerSel.value;
+  if(v!== "0" && v!=="1"){
+    document.getElementById("status").textContent = "اختر اللاعب أولاً.";
+    return;
+  }
+  const idx = parseInt(v,10);
+  const pts = Math.max(0, parseInt(document.getElementById("points").value || "0", 10));
+  const t = getTotals();
+  t[idx] += pts;
+  setTotals(t);
+  renderTotals();
+  document.getElementById("status").textContent = `✅ تم إضافة ${pts} نقطة لـ ${idx===0 ? p1 : p2}`;
+});
+
+document.getElementById("clearBtn").addEventListener("click", ()=>{
+  playerSel.value = "";
+  document.getElementById("points").value = "10";
+  document.getElementById("status").textContent = "تم التفريغ.";
+});
+</script>
+</body>
+</html>

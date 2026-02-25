@@ -109,37 +109,45 @@ h1{
   font-size:34px;
 }
 
+/* ✅ رجع شكل الكروت مثل قبل */
 .grid{
   position:relative;
   display:grid;
-  grid-template-columns: repeat(3, minmax(0,1fr));
-  gap:12px;
+  grid-template-columns: repeat(3, 1fr);
+  gap:18px;
+  margin-top:10px;
 }
 
 .card{
   background:var(--card);
   border:1px solid var(--stroke);
   border-radius:18px;
-  padding:18px;
+  padding:22px 20px;
   box-shadow:0 14px 40px rgba(0,0,0,.08);
+  text-align:center;
+  transition:.2s;
+}
+
+.card:hover{
+  transform:translateY(-3px);
 }
 
 .card h2{
-  margin:0 0 8px 0;
+  margin:0 0 6px 0;
   color:var(--deep);
-  font-size:20px;
+  font-size:22px;
   font-weight:1200;
 }
 
 .card p{
-  margin:0;
+  margin:0 0 14px 0;
   color:rgba(11,61,46,.85);
   font-weight:900;
-  line-height:1.5;
+  font-size:15px;
+  line-height:1.7;
 }
 
 .optionBtn{
-  margin-top:14px;
   width:100%;
   padding:12px 14px;
   border-radius:14px;
@@ -150,11 +158,11 @@ h1{
   cursor:pointer;
   transition:.15s;
 }
-.optionBtn:hover{ transform: translateY(-1px); }
+.optionBtn:hover{ transform:translateY(-1px); }
 
 .optionBtn.disabled{
-  background: #9fb6ae;
-  border-color: rgba(11,61,46,.12);
+  background:#9fb6ae;
+  border-color:rgba(11,61,46,.12);
   cursor:not-allowed;
   pointer-events:none;
 }
@@ -181,19 +189,19 @@ h1{
   <div class="grid">
     <div class="card">
       <h2>جولة العطر المجهول</h2>
-      <p>التحديات (7) — لكل تحدي 4 أسئلة.</p>
+      <p>افتح أرقام اللوحة لكشف معلومات عن العطر. كل رقم يفتح معلومة، والنقاط تقل مع كل فتح. أول من يجاوب صح يكسب النقاط.</p>
       <button class="optionBtn" id="goUnknown">دخول الجولة</button>
     </div>
 
     <div class="card">
       <h2>جولة الجرس</h2>
-      <p>قريبًا…</p>
+      <p>جولة سرعة وتحدّي: أول لاعب يضغط الجرس يجاوب خلال وقت محدد. إجابة صحيحة = نقاط، وخطأ = الدور للثاني.</p>
       <button class="optionBtn disabled">غير متاح الآن</button>
     </div>
 
     <div class="card">
       <h2>جولة تحدي الـ٣٠ ثانية</h2>
-      <p>قريبًا…</p>
+      <p>تحدي سريع: عندك ٣٠ ثانية تذكر أكبر عدد ممكن (مكونات/عطور/تصنيفات حسب السؤال). كل إجابة صحيحة تحتسب نقاط.</p>
       <button class="optionBtn disabled">غير متاح الآن</button>
     </div>
   </div>

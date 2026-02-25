@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>جولة الجرس</title>
+
+<style>
+:root{
+  --bg:#E6EEE9;
+  --deep:#0B3D2E;
+  --mid:#1F6B52;
+  --card:#ffffffee;
+  --stroke:#cfe1da;
+  --danger:#7c1f1f;
+  --muted:#9fb6ae;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+  background:#f4f4f4;
+  padding:22px;
+}
+
+.shell{
+  max-width:1100px;
+  margin:auto;
+  background:var(--bg);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+.shell::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    repeating-radial-gradient(circle at 30% 30%,
+      rgba(11,61,46,.06) 0 1px,
+      transparent 1px 28px),
+    repeating-radial-gradient(circle at 70% 65%,
+      rgba(11,61,46,.05) 0 1px,
+      transparent 1px 32px);
+  opacity:.55;
+  pointer-events:none;
+}
+
+.topbar{
+  position:relative;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+
+.logo{
+  width:min(220px, 70vw);
+  height:auto;
+  filter: drop-shadow(0 10px 25px rgba(0,0,0,.10));
+}
+
+.pill{
+  background: rgba(255,255,255,.92);
+  border:1px solid var(--stroke);
+  border-radius:999px;
+  padding:10px 12px;
+  font-weight:1000;
+  color:var(--deep);
+  box-shadow: 0 10px 26px rgba(0,0,0,.08);
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+
+.btn{
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1100;
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  transition:.15s;
+}
+.btn:hover{ transform:translateY(-1px); }
+
+.btn.secondary{
+  background:#fff;
+  color:var(--deep);
+}
+
+.grid{
+  position:relative;
+  display:grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap:16px;
+  align-items:start;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--stroke);
+  border-radius:18px;
+  padding:18px;
+  box-shadow:0 14px 40px rgba(0,0,0,.08);
+}
+
+.h1{
+  margin:0 0 10px 0;
+  color:var(--deep);
+  font-size:28px;
+  font-weight:1200;
+}
+
+.help{
+  margin:0;
+  color:rgba(11,61,46,.85);
+  font-weight:900;
+  line-height:1.7;
+}
+
+.bigTimer{
+  margin-top:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:120px;
+  border-radius:18px;
+  background:#fff;
+  border:1px solid var(--stroke);
+  font-size:56px;
+  font-weight:1200;
+  color:var(--deep);
+  box-shadow: inset 0 0 0 4px rgba(11,61,46,.05);
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.buzzer{
+  flex:1;
+  min-width:220px;
+  padding:18px 16px;
+  border-radius:18px;
+  border:1px solid rgba(11,61,46,.25);
+  background: linear-gradient(180deg, var(--mid), #16604a);
+  color:#fff;
+  font-weight:1200;
+  font-size:20px;
+  cursor:pointer;
+  transition:.12s;
+}
+.buzzer:hover{ transform:translateY(-1px); }
+.buzzer:active{ transform:translateY(0); opacity:.95; }
+
+.buzzer.locked{
+  background: #9fb6ae;
+  border-color: rgba(11,61,46,.12);
+  cursor:not-allowed;
+  pointer-events:none;
+}
+
+.status{
+  margin-top:12px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid var(--stroke);
+  font-weight:1100;
+  color:var(--deep);
+}
+
+.select{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  font-weight:1000;
+  outline:none;
+}
+
+.input{
+  width:100%;
+  padding:12px 12px;
+  border-radius:14px;
+  border:1px solid var(--stroke);
+  background:#fff;
+  font-weight:1000;
+  outline:none;
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  background: rgba(11,61,46,.08);
+  color: var(--deep);
+  font-weight:1100;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.ok{
+  background: linear-gradient(180deg, #1F6B52, #16604a);
+  color:#fff;
+}
+
+.no{
+  background: linear-gradient(180deg, #7c1f1f, #5a1414);
+  border-color: rgba(124,31,31,.35);
+  color:#fff;
+}
+
+.mini{
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(11,61,46,.25);
+  background:#fff;
+  color:var(--deep);
+  font-weight:1100;
+  cursor:pointer;
+}
+.mini:hover{ transform:translateY(-1px); }
+
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; }
+  .buzzer{ min-width: 0; }
+}
+</style>
+</head>
+
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <img class="logo" src="images/logo.png" alt="جولات عطرية">
+    <div class="pill" id="playersPill">المتسابقين: —</div>
+    <div class="pill" id="totalsPill">النقاط: —</div>
+    <a class="btn secondary" href="rounds.html">رجوع للجولات</a>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="h1">جولة الجرس</div>
+      <p class="help">
+        اختر نوع السؤال (اختياري)، ثم اضغط “ابدأ وقت الإجابة”. أول لاعب يضغط الجرس يصير له حق الإجابة.
+        إذا كانت الإجابة <b>خطأ</b> ينتقل الحق للاعب الثاني مباشرة.
+      </p>
+
+      <div class="bigTimer" id="timer">10</div>
+
+      <div class="row">
+        <button class="buzzer" id="buzz1">🔔 جرس <span id="name1">لاعب 1</span></button>
+        <button class="buzzer" id="buzz2">🔔 جرس <span id="name2">لاعب 2</span></button>
+      </div>
+
+      <div class="status" id="status">جاهز — اضغط زر الجرس أو ابدأ المؤقت.</div>
+
+      <div class="actions">
+        <button class="btn" id="startTimerBtn">ابدأ وقت الإجابة</button>
+        <button class="btn secondary" id="resetRoundBtn">إعادة السؤال</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="h1">لوحة التحكم</div>
+
+      <div class="badge" style="margin-bottom:10px;">🎯 اللاعب المُختار: <span id="activeName">—</span></div>
+
+      <label class="help" style="display:block; margin-top:6px;">نوع السؤال (اختياري)</label>
+      <select class="select" id="qType">
+        <option value="">— بدون —</option>
+        <option>اسم العطر</option>
+        <option>مكوّن / نوتة</option>
+        <option>دار عطرية</option>
+        <option>عطار</option>
+        <option>سنة إصدار</option>
+        <option>تصنيف / عائلة</option>
+      </select>
+
+      <label class="help" style="display:block; margin-top:10px;">نقاط السؤال</label>
+      <input class="input" id="points" type="number" min="0" step="1" value="10"/>
+
+      <div class="actions">
+        <button class="btn ok" id="correctBtn">✅ صحيح (تثبيت النقاط)</button>
+        <button class="btn no" id="wrongBtn">❌ خطأ</button>
+        <button class="mini" id="clearBtn">تفريغ الاختيار</button>
+      </div>
+
+      <div class="status" id="hint" style="margin-top:12px;">
+        ملاحظة: “صحيح” يضيف النقاط لمجموع اللاعب — “خطأ” ينقل الدور للاعب الآخر.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* auth */
+const authed = (sessionStorage.getItem("jawalat_authed")==="1") || (localStorage.getItem("jawalat_authed")==="1");
+if(!authed) window.location.href="index.html";
+
+/* players + totals */
+const p1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1").trim();
+const p2 = (localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "لاعب 2").trim();
+
+document.getElementById("playersPill").textContent = `المتسابقين: ${p1} — ${p2}`;
+document.getElementById("name1").textContent = p1;
+document.getElementById("name2").textContent = p2;
+
+function getTotals(){
+  const raw = localStorage.getItem("jawalat_totals_v1");
+  if(!raw) return [0,0];
+  try{ const obj = JSON.parse(raw); if(obj?.totals?.length===2) return obj.totals; }catch(e){}
+  return [0,0];
+}
+function setTotals(t){
+  localStorage.setItem("jawalat_totals_v1", JSON.stringify({ totals:t }));
+}
+function renderTotals(){
+  const t = getTotals();
+  document.getElementById("totalsPill").textContent = `النقاط: ${p1} (${t[0]}) — ${p2} (${t[1]})`;
+}
+renderTotals();
+
+/* state */
+let active = null; // 0 or 1
+let locked = false;
+
+const buzz1 = document.getElementById("buzz1");
+const buzz2 = document.getElementById("buzz2");
+const statusEl = document.getElementById("status");
+const activeName = document.getElementById("activeName");
+
+function setActive(idx){
+  active = idx;
+  activeName.textContent = idx===0 ? p1 : idx===1 ? p2 : "—";
+  statusEl.textContent = idx===0 ? `🎯 الدور على: ${p1}` : `🎯 الدور على: ${p2}`;
+}
+
+function lockBuzzers(){
+  locked = true;
+  if(active===0){
+    buzz1.classList.remove("locked");
+    buzz2.classList.add("locked");
+  }else if(active===1){
+    buzz2.classList.remove("locked");
+    buzz1.classList.add("locked");
+  }else{
+    buzz1.classList.remove("locked");
+    buzz2.classList.remove("locked");
+  }
+}
+
+function unlockBuzzers(){
+  locked = false;
+  buzz1.classList.remove("locked");
+  buzz2.classList.remove("locked");
+}
+
+/* timer */
+let left = 10;
+let timerId = null;
+
+function renderTimer(){ document.getElementById("timer").textContent = String(left); }
+
+function stopTimer(){
+  if(timerId){ clearInterval(timerId); timerId=null; }
+}
+
+function startTimer(){
+  stopTimer();
+  left = 10;
+  renderTimer();
+  timerId = setInterval(()=>{
+    left -= 1;
+    renderTimer();
+    if(left<=0){
+      stopTimer();
+      statusEl.textContent = "⏱️ انتهى الوقت";
+    }
+  }, 1000);
+}
+
+document.getElementById("startTimerBtn").addEventListener("click", ()=>{
+  startTimer();
+  statusEl.textContent = "⏱️ بدأ الوقت — اضغط الجرس!";
+});
+
+buzz1.addEventListener("click", ()=>{
+  if(locked) return;
+  setActive(0);
+  lockBuzzers();
+});
+
+buzz2.addEventListener("click", ()=>{
+  if(locked) return;
+  setActive(1);
+  lockBuzzers();
+});
+
+document.getElementById("wrongBtn").addEventListener("click", ()=>{
+  if(active===null){
+    statusEl.textContent = "اختر لاعب بالجرس أولاً.";
+    return;
+  }
+  // خطأ = ينتقل للثاني
+  const next = active===0 ? 1 : 0;
+  setActive(next);
+  lockBuzzers();
+  statusEl.textContent = `❌ خطأ — الآن الدور على: ${next===0 ? p1 : p2}`;
+});
+
+document.getElementById("correctBtn").addEventListener("click", ()=>{
+  if(active===null){
+    statusEl.textContent = "اختر لاعب بالجرس أولاً.";
+    return;
+  }
+  const pts = Math.max(0, parseInt(document.getElementById("points").value || "0", 10));
+  const t = getTotals();
+  t[active] += pts;
+  setTotals(t);
+  renderTotals();
+
+  stopTimer();
+  statusEl.textContent = `✅ صحيح — تم إضافة ${pts} نقطة لـ ${active===0 ? p1 : p2}`;
+  // بعد الصحيح نجهز للسؤال التالي (بدون ما نغير صفحة)
+  active = null;
+  activeName.textContent = "—";
+  unlockBuzzers();
+});
+
+document.getElementById("clearBtn").addEventListener("click", ()=>{
+  active = null;
+  activeName.textContent = "—";
+  statusEl.textContent = "جاهز — اضغط زر الجرس أو ابدأ المؤقت.";
+  unlockBuzzers();
+});
+
+document.getElementById("resetRoundBtn").addEventListener("click", ()=>{
+  stopTimer();
+  left = 10;
+  renderTimer();
+  active = null;
+  activeName.textContent = "—";
+  unlockBuzzers();
+  statusEl.textContent = "تمت إعادة السؤال — جاهز.";
+});
+</script>
+</body>
+</html>

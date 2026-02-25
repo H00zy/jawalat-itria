@@ -178,7 +178,6 @@ h1{
   opacity:.98;
 }
 
-/* ✅ badge: ✔ تم */
 .qBtn.done::after{
   content:"✔ تم";
   position:absolute;
@@ -208,6 +207,7 @@ h1{
     <div class="pill" id="playersPill">المتسابقين: —</div>
     <div class="pill" id="totalsPill">النقاط: —</div>
     <a class="btn secondary" href="rounds.html">رجوع للجولات</a>
+    <button class="btn secondary" id="logoutBtn">تسجيل خروج</button>
   </div>
 
   <h1>جولة العطر المجهول</h1>
@@ -218,10 +218,30 @@ h1{
 
 <script>
 /* auth: session OR local */
-const authed = (sessionStorage.getItem("jawalat_authed") === "1") || (localStorage.getItem("jawalat_authed") === "1");
+const authed =
+  sessionStorage.getItem("jawalat_authed") === "1" ||
+  localStorage.getItem("jawalat_authed") === "1";
+
 if(!authed){
   window.location.href = "index.html";
 }
+
+/* logout = يمسح كل شيء */
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+  localStorage.removeItem("jawalat_authed");
+  sessionStorage.removeItem("jawalat_authed");
+
+  localStorage.removeItem("jawalat_p1");
+  localStorage.removeItem("jawalat_p2");
+  sessionStorage.removeItem("jawalat_p1");
+  sessionStorage.removeItem("jawalat_p2");
+
+  localStorage.removeItem("jawalat_totals_v1");
+  localStorage.removeItem("jawalat_locked_v1");
+  localStorage.removeItem("jawalat_force_names");
+
+  window.location.href = "index.html";
+});
 
 /* players */
 const p1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "لاعب 1").trim();

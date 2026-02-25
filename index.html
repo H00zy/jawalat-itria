@@ -106,6 +106,7 @@ body{
   justify-content:center;
   gap:10px;
   margin-top:16px;
+  flex-wrap:wrap;
 }
 
 .btn{
@@ -198,17 +199,26 @@ function showStep(n){
   nameMsg.textContent = "";
 }
 
+/* ✅ عبّي الأسماء لو محفوظة (حتى لو رجعت للصفحة لأي سبب) */
+function fillSavedNames(){
+  const saved1 = (localStorage.getItem("jawalat_p1") || sessionStorage.getItem("jawalat_p1") || "").trim();
+  const saved2 = (localStorage.getItem("jawalat_p2") || sessionStorage.getItem("jawalat_p2") || "").trim();
+  if(saved1) p1.value = saved1;
+  if(saved2) p2.value = saved2;
+}
+
 document.getElementById("checkBtn").addEventListener("click", ()=>{
   if((pw.value || "").trim() !== PASSWORD){
     pwMsg.textContent = "كلمة المرور غير صحيحة";
     return;
   }
 
-  // ✅ حفظ auth في الاثنين
+  // ✅ حفظ auth في الاثنين (عشان التبويبات المختلفة)
   sessionStorage.setItem("jawalat_authed", "1");
   localStorage.setItem("jawalat_authed", "1");
 
   showStep(2);
+  fillSavedNames();
   p1.focus();
 });
 
@@ -241,12 +251,13 @@ document.getElementById("startBtn").addEventListener("click", ()=>{
   window.location.href = "rounds.html";
 });
 
-// لو سبق الدخول
+/* ✅ لو سبق الدخول، افتح خطوة الأسماء مباشرة */
 if(
   sessionStorage.getItem("jawalat_authed") === "1" ||
   localStorage.getItem("jawalat_authed") === "1"
 ){
   showStep(2);
+  fillSavedNames();
 }
 </script>
 </body>

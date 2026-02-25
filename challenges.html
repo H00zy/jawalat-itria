@@ -170,25 +170,28 @@ h1{
 }
 .qBtn:hover{ transform:translateY(-2px); }
 
-.qBtn.locked{
+.qBtn.done{
   background: linear-gradient(180deg, #9fb6ae, #8ca69d);
   cursor:not-allowed;
   pointer-events:none;
   transform:none !important;
-  opacity:.95;
+  opacity:.98;
 }
-.qBtn.locked::after{
-  content:"مقفول";
+
+/* ✅ badge: ✔ تم */
+.qBtn.done::after{
+  content:"✔ تم";
   position:absolute;
   top:8px;
   left:10px;
   font-size:12px;
   font-weight:1100;
-  padding:4px 8px;
+  padding:4px 10px;
   border-radius:999px;
-  background: rgba(255,255,255,.85);
-  color:#314a42;
-  border:1px solid rgba(49,74,66,.15);
+  background: rgba(255,255,255,.88);
+  color: #0B3D2E;
+  border: 1px solid rgba(11,61,46,.16);
+  box-shadow: 0 8px 18px rgba(0,0,0,.06);
 }
 
 @media (max-width: 900px){
@@ -239,7 +242,7 @@ const totals = getTotals();
 document.getElementById("totalsPill").textContent =
   `النقاط: ${p1} (${totals[0]}) — ${p2} (${totals[1]})`;
 
-/* locked list */
+/* done list */
 function getLocked(){
   const raw = localStorage.getItem("jawalat_locked_v1");
   if(!raw) return [];
@@ -249,7 +252,7 @@ function getLocked(){
   }catch(e){}
   return [];
 }
-const locked = new Set(getLocked());
+const done = new Set(getLocked());
 
 /* build challenges */
 const container = document.getElementById("container");
@@ -276,8 +279,8 @@ for(let ch=1; ch<=7; ch++){
     link.textContent = `السؤال ${q}`;
     link.target = "_blank";
 
-    if(locked.has(key)){
-      link.classList.add("locked");
+    if(done.has(key)){
+      link.classList.add("done");
       link.removeAttribute("href");
       link.removeAttribute("target");
     }
